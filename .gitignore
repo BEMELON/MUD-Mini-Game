@@ -80,7 +80,11 @@
 # CMake
 cmake-build-*/
 
+# CLion
 .idea/
+
+# Cmake build files
+**/build/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
