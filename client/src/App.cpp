@@ -10,5 +10,5 @@ int main() {
     Client client = Client(8080, new NaiveLogger());
 
     client.connect();
-    client.send("Hello World");
+    client.send(R"({ "status" : "ok" })");
 }
