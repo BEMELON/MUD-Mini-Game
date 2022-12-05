@@ -8,6 +8,8 @@
 #include <arpa/inet.h>
 #include "../header/Client.h"
 #include "../interface/Logger.h"
+#include "../header/rapidjson/document.h"
+#include <iostream>
 
 Client::Client(int port, Logger *logger) {
     this->port = port;
@@ -38,9 +40,16 @@ int Client::send(std::string msg) {
     if (::send(this->fd, buffer, 256, 0) < 0)
         this->logger->logSysErrorMsg("Send Error");
 
+    rapidjson::Document document;
     memset(buffer, 0, 256);
     if (recv(this->fd, buffer, 256, 0) < 0)
         this->logger->logSysErrorMsg("Recv Error");
-    this->logger->logInfoMsg(buffer);
+    document.Parse(buffer);
+
+    if (document.HasParseError())
+        this->logger->logInfoMsg("Json Parse Error");
+
+    std::cout << document["status"].GetString() << std::endl;
+//    this->logger->logInfoMsg(buffer);
     return 1;
 }
