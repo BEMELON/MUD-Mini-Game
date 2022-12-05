@@ -6,11 +6,12 @@
 #define MUD_MINI_GAME_SERVER_H
 
 
+#include <netinet/in.h>
 #include "../interface/Logger.h"
 
 class Server {
 public:
-
+    const char *const BROADCAST_ADDR = "0.0.0.0";
     int port;
     Logger *logger;
 
@@ -21,6 +22,7 @@ public:
 
 private:
     void start();
+    struct sockaddr_in *initSockAddr() const;
 };
 
 

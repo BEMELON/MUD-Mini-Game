@@ -37,6 +37,7 @@ void NaiveLogger::logInfoMsg(std::string msg) {
 }
 
 void NaiveLogger::logSysErrorMsg(const char *msg) {
-    cout << "[SERVER][ERROR]" << msg;
+    cout << "[SERVER][ERROR]" << msg << endl;
     std::perror(msg);
+    ::exit(EXIT_FAILURE);
 }

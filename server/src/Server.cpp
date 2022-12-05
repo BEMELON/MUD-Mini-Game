@@ -10,6 +10,10 @@
 #include "../header/Server.h"
 #include <iostream>
 #include "../header/NaiveLogger.h"
+#include "../header/rapidjson/document.h"
+#include "../header/rapidjson/writer.h"
+#include "../header/rapidjson/stringbuffer.h"
+#include "../header/rapidjson/prettywriter.h"
 
 Server::Server(int port) {
     this->port = port;
@@ -29,17 +33,13 @@ void Server::listen() {
 
 void Server::start() {
     int fd;
-    struct sockaddr_in server_addr;
+    struct sockaddr_in *server_addr;
 
+    server_addr = this->initSockAddr();
     if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         this->logger->logSysErrorMsg("Sock Error");
 
-    memset(&server_addr, 0, sizeof(struct sockaddr_in));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(this->port);
-    server_addr.sin_addr.s_addr = inet_addr("0.0.0.0");
-
-    if ((bind(fd, (struct sockaddr *)&server_addr, sizeof(struct sockaddr_in))) < 0)
+    if ((bind(fd, (struct sockaddr *)server_addr, sizeof(struct sockaddr_in))) < 0)
         this->logger->logSysErrorMsg("Bind Error");
 
     int active_fd;
@@ -57,11 +57,29 @@ void Server::start() {
         this->logger->logSysErrorMsg("Accept Error");
 
     char buffer[256];
+    rapidjson::Document document;
     while (read(active_fd, buffer, 256) > 0) {
-        std::cout << "Client sends " << buffer << std::endl;
+        char log[1024] = "Client sends, ";
+        strcpy(log, buffer);
+        this->logger->logInfoMsg(log);
 
-        char ack[256] = "accepted";
+        document.Parse(buffer);
+
+        if (document.HasParseError())
+            this->logger->logInfoMsg("JSON Parsing Error");
+        std::cout << document["status"].GetString() << std::endl;
+
+        char ack[256] = R"({ "status" : "ok" })";
         if (send(active_fd, ack, 256, 0) < 0)
             this->logger->logSysErrorMsg("Send Error");
     }
+}
+
+struct sockaddr_in *Server::initSockAddr() const {
+    struct sockaddr_in *server;
+    server = (struct sockaddr_in *) calloc(sizeof(struct sockaddr_in), 1);
+    server->sin_family = AF_INET;
+    server->sin_port = htons(this->port);
+    server->sin_addr.s_addr = inet_addr(this->BROADCAST_ADDR);
+    return server;
 }
