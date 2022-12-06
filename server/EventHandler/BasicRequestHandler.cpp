@@ -64,16 +64,17 @@ void BasicRequestHandler::listen(int port) {
         this->logger->logInfoMsg("JSON Parsing Error");
     std::cout << document["status"].GetString() << std::endl;
 
+    auto fn = this->router.find("/")->second;
+    IController *controller = this->controller.find("/")->second;
+
+    auto res = (controller->*fn)(&document);
+
     char ack[MAX_BUFFER] = R"({ "status" : "ok" })";
     if (send(active_fd, ack, MAX_BUFFER, 0) < 0)
         this->logger->logSysErrorMsg("Send Error");
-
-    auto fn = this->router.find("/")->second;
-    IController *controller = this->controller.find("/")->second;
-    (controller->*fn)(&document);
 }
 
-void BasicRequestHandler::addRoute(std::string path, void (IController::*fn_router)(rapidjson::Document *), IController *caller) {
+void BasicRequestHandler::addRoute(std::string path, rapidjson::Document* (IController::*fn_router)(rapidjson::Document *), IController *caller) {
     this->router.insert(std::make_pair(path, fn_router));
     this->controller.insert(std::make_pair(path, caller));
 }

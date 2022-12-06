@@ -13,7 +13,7 @@ class IRequestHandler;
 interface IController {
 public:
     virtual void addRoute(IRequestHandler *handler) = 0;
-    virtual void get(rapidjson::Document *body) = 0;
+    virtual rapidjson::Document*  get(rapidjson::Document *body) = 0;
 };
 
 

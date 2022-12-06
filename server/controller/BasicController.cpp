@@ -9,6 +9,10 @@ void BasicController::addRoute(IRequestHandler *handler) {
     handler->addRoute("/", &IController::get, this);
 }
 
-void BasicController::get(rapidjson::Document *body) {
-    std::cout << "Hello World!" << std::endl;
+rapidjson::Document* BasicController::get(rapidjson::Document *body) {
+    std::cout << "Hello BasicController!" << std::endl;
+
+    auto *document = new rapidjson::Document();
+
+    return document;
 }

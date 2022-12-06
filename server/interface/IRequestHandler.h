@@ -19,7 +19,7 @@ namespace __gnu_cxx {
         }
     };
 }
-typedef __gnu_cxx::hash_map<std::string,  void (IController::*)(rapidjson::Document *)> ROUTER_HASHMAP;
+typedef __gnu_cxx::hash_map<std::string,  rapidjson::Document* (IController::*)(rapidjson::Document *)> ROUTER_HASHMAP;
 typedef __gnu_cxx::hash_map<std::string, IController *> CONTROLLER_HASHMAP;
 
 interface IRequestHandler {
@@ -30,7 +30,7 @@ protected:
     CONTROLLER_HASHMAP controller;
 public:
     virtual void setLogger(ILogger *logger) = 0;
-    virtual void addRoute(std::string path, void (IController::*fn_router)(rapidjson::Document *parser), IController *caller) = 0;
+    virtual void addRoute(std::string path, rapidjson::Document* (IController::*fn_router)(rapidjson::Document *parser), IController *caller) = 0;
     virtual void listen(int port) = 0;
 };
 
