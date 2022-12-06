@@ -13,8 +13,6 @@
 
 void BasicRequestHandler::listen(int port) {
     // Setup for Logging
-    this->logger->logHeader();
-    this->logger->logInfoMsg("Server started at port " + std::to_string(port));
     this->port = port;
 
     struct sockaddr_in server_addr, client_addr; // 서버/클라이언트 구조체
@@ -45,6 +43,7 @@ void BasicRequestHandler::listen(int port) {
     memset(&client_addr, 0, sizeof(struct sockaddr_in));
 
     this->logger->logInfoMsg("BasicRequestHandler Started!");
+    this->logger->logInfoMsg("Server started at port " + std::to_string(port));
 
     while (true) {
         if ((active_fd = accept(passive_fd, (struct sockaddr *)&client_addr, &client_len)) < 0)

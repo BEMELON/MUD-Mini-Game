@@ -10,6 +10,7 @@
 #include "../interface/ILogger.h"
 #include "../interface/IRequestHandler.h"
 #include "BasicRequestHandler.h"
+#include "../interface/IRepository.h"
 
 class Server {
 private:
@@ -21,9 +22,11 @@ private:
 
     void initRequestHandler(IRequestDTO* requestDto, IResponseDTO* responseDto);
     void initControllers(IController *controllers[]);
+    void initRepository(IRepository *repository);
     void initConfig();
 public:
-    Server(ILogger *logger, IRequestHandler *handler, IController *controllers[], IRequestDTO* requestDto, IResponseDTO* responseDto);
+    Server(ILogger *logger, IRequestHandler *handler, IController *controllers[],
+           IRequestDTO* requestDto, IResponseDTO* responseDto, IRepository *repository);
 
     void listen();
 };

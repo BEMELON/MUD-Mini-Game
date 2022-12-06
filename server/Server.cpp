@@ -5,16 +5,15 @@
 #include <fstream>
 #include <sstream>
 #include "header/Server.h"
-#include "header/BasicLogger.h"
-#include "header/rapidjson/writer.h"
-#include "header/BasicRequestHandler.h"
 #include "header/JsonParser.h"
 
 
-Server::Server(ILogger *logger, IRequestHandler *handler, IController* controllers[], IRequestDTO* requestDto, IResponseDTO* responseDto) {
+Server::Server(ILogger *logger, IRequestHandler *handler, IController* controllers[], IRequestDTO* requestDto, IResponseDTO* responseDto, IRepository *repository) {
+    logger->logHeader();
     this->logger = logger;
     this->requestHandler = handler;
     this->initConfig();
+    this->initRepository(repository);
     this->initRequestHandler(requestDto, responseDto);
     this->initControllers(controllers);
 }
@@ -43,10 +42,8 @@ void Server::initConfig() {
     ifstream ifs;
     // TODO: fix-me
     ifs.open("/home/hgdkim2/Desktop/MUD-Mini-Game/server/config.json");
-    cout << ifs.fail() << endl;
     configBuffer << ifs.rdbuf();
 
-    cout << configBuffer.str() << endl;
     configParser.parse(configBuffer.str());
     if (configParser.has("redis-server"))
         this->redis_addr = configParser.getString("redis-server");
@@ -54,4 +51,11 @@ void Server::initConfig() {
         this->redis_port = configParser.getInt("redis-port");
     if (configParser.has("server-port"))
         this->server_port = configParser.getInt("server-port");
+}
+
+void Server::initRepository(IRepository *repository) {
+    bool connected;
+
+    repository->setLogger(this->logger);
+    connected = repository->connect(this->redis_addr.c_str(), this->redis_port);
 }

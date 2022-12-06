@@ -7,6 +7,7 @@
 #include "header/BasicController.h"
 #include "header/BasicRequestDto.h"
 #include "header/BasicResponseDto.h"
+#include "header/RedisRepository.h"
 
 using namespace std;
 
@@ -18,7 +19,8 @@ int main() {
                             new BasicRequestHandler(),
                             controllers,
                             new BasicRequestDto(),
-                            new BasicResponseDto());
+                            new BasicResponseDto(),
+                            new RedisRepository());
     server.listen();
 }
 
