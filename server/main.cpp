@@ -14,8 +14,7 @@ int main() {
     IController *controllers[1];
     controllers[0] = new BasicController();
 
-    Server server = Server(8080,
-                            new BasicLogger(),
+    Server server = Server( new BasicLogger(),
                             new BasicRequestHandler(),
                             controllers,
                             new BasicRequestDto(),
