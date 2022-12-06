@@ -17,6 +17,8 @@ public:
     BasicResponseDto(const char *msg);
 
     std::string getJsonMsg() override;
+
+    IResponseDTO* setStatus(const char *status) override;
 };
 
 

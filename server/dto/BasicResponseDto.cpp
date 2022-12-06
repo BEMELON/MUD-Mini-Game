@@ -9,7 +9,11 @@
 
 BasicResponseDto::BasicResponseDto() {}
 
-BasicResponseDto::BasicResponseDto(const char *status) {
+std::string BasicResponseDto::getJsonMsg() {
+    return this->json_msg;
+}
+
+IResponseDTO *BasicResponseDto::setStatus(const char *status) {
     this->msg = status;
 
     rapidjson::Document d(rapidjson::kObjectType);
@@ -22,8 +26,5 @@ BasicResponseDto::BasicResponseDto(const char *status) {
     d.Accept(writer);
 
     this->json_msg = strbuf.GetString();
-}
-
-std::string BasicResponseDto::getJsonMsg() {
-    return this->json_msg;
+    return this;
 }

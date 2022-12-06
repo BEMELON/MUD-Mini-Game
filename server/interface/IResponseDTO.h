@@ -10,6 +10,7 @@
 interface IResponseDTO {
 public:
     virtual std::string getJsonMsg() = 0;
+    virtual IResponseDTO* setStatus(const char *status) = 0;
 };
 
 #endif //MUD_SERVER_IRESPONSEDTO_H

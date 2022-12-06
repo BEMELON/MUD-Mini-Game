@@ -13,5 +13,5 @@ void BasicController::addRoute(IRequestHandler *handler) {
 IResponseDTO* BasicController::get(IRequestDTO* body, IResponseDTO* resp) {
     std::cout << "Hello BasicController!" << std::endl;
 
-    return new BasicResponseDto("success");
+    return resp->setStatus("success");
 }
