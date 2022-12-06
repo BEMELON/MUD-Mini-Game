@@ -2,12 +2,12 @@
 // Created by BEMELON on 22. 12. 5.
 //
 
-#ifndef MUD_SERVER_MULTIPROCESSREQUESTHANDLER_H
-#define MUD_SERVER_MULTIPROCESSREQUESTHANDLER_H
+#ifndef MUD_SERVER_BASICREQUESTHANDLER_H
+#define MUD_SERVER_BASICREQUESTHANDLER_H
 #include "../interface/IRequestHandler.h"
 #define MAX_BUFFER 1024
 #define MSG_BUFFER 1536
-class MultiProcessRequestHandler: public IRequestHandler {
+class BasicRequestHandler: public IRequestHandler {
 private:
 
 public:
@@ -16,4 +16,4 @@ public:
     void addRoute(std::string path, void (IController::*fn_router)(rapidjson::Document *) , IController *caller) override;
 };
 
-#endif //MUD_SERVER_MULTIPROCESSREQUESTHANDLER_H
+#endif //MUD_SERVER_BASICREQUESTHANDLER_H

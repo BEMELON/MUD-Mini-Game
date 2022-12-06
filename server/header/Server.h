@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include "../interface/ILogger.h"
 #include "../interface/IRequestHandler.h"
-#include "MultiProcessRequestHandler.h"
+#include "BasicRequestHandler.h"
 
 class Server {
 private:

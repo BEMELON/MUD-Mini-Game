@@ -3,18 +3,18 @@
 //
 
 #include "header/Server.h"
-#include "header/NaiveLogger.h"
-#include "header/NaiveController.h"
+#include "header/BasicLogger.h"
+#include "header/BasicController.h"
 
 using namespace std;
 
 int main() {
     IController *controllers[1];
-    controllers[0] = new NaiveController();
+    controllers[0] = new BasicController();
 
     Server server = Server(8080,
-                           new NaiveLogger(),
-                           new MultiProcessRequestHandler(),
+                           new BasicLogger(),
+                           new BasicRequestHandler(),
                           controllers
     );
     server.listen();

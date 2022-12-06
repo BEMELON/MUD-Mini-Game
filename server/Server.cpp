@@ -3,9 +3,9 @@
 //
 
 #include "header/Server.h"
-#include "header/NaiveLogger.h"
+#include "header/BasicLogger.h"
 #include "header/rapidjson/writer.h"
-#include "header/MultiProcessRequestHandler.h"
+#include "header/BasicRequestHandler.h"
 
 
 Server::Server(int port, ILogger *logger, IRequestHandler *handler, IController *controllers[]) {

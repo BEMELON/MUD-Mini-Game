@@ -2,11 +2,11 @@
 // Created by BEMELON on 22. 12. 5.
 //
 
-#include "../header/NaiveLogger.h"
+#include "../header/BasicLogger.h"
 #include <iostream>
 
 using namespace  std;
-void NaiveLogger::logHeader() {
+void BasicLogger::logHeader() {
     cout << R"(
     .___  ___.        __   __    __     .______        ___       ______  __  ___  _______ .__   __.  _______
     |   \/   |       |  | |  |  |  |    |   _  \      /   \     /      ||  |/  / |   ____||  \ |  | |       \
@@ -32,11 +32,11 @@ void NaiveLogger::logHeader() {
     )" << endl;
 }
 
-void NaiveLogger::logInfoMsg(std::string msg) {
+void BasicLogger::logInfoMsg(std::string msg) {
     cout << "[SERVER] " << msg << endl;
 }
 
-void NaiveLogger::logSysErrorMsg(const char *msg) {
+void BasicLogger::logSysErrorMsg(const char *msg) {
     cout << "[SERVER][ERROR]" << msg << endl;
     std::perror(msg);
     ::exit(EXIT_FAILURE);

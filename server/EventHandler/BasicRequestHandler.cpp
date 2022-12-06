@@ -8,9 +8,9 @@
 #include <csignal>
 #include <iostream>
 #include <hash_map>
-#include "../header/MultiProcessRequestHandler.h"
+#include "../header/BasicRequestHandler.h"
 
-void MultiProcessRequestHandler::listen(int port) {
+void BasicRequestHandler::listen(int port) {
     // Setup for Logging
     this->logger->logHeader();
     this->logger->logInfoMsg("Server started at port " + std::to_string(port));
@@ -73,11 +73,11 @@ void MultiProcessRequestHandler::listen(int port) {
     (controller->*fn)(&document);
 }
 
-void MultiProcessRequestHandler::addRoute(std::string path, void (IController::*fn_router)(rapidjson::Document *), IController *caller) {
+void BasicRequestHandler::addRoute(std::string path, void (IController::*fn_router)(rapidjson::Document *), IController *caller) {
     this->router.insert(std::make_pair(path, fn_router));
     this->controller.insert(std::make_pair(path, caller));
 }
 
-void MultiProcessRequestHandler::setLogger(ILogger *logger) {
+void BasicRequestHandler::setLogger(ILogger *logger) {
     this->logger = logger;
 }
