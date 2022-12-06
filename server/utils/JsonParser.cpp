@@ -23,6 +23,10 @@ bool JsonParser::hasError() {
     return this->parseError;
 }
 
+rapidjson::Document *JsonParser::getDocument() {
+    return &this->d;
+}
+
 string JsonParser::getString(string key) {
     return d[key.c_str()].GetString();
 }

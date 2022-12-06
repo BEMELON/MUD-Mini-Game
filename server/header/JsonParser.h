@@ -23,6 +23,8 @@ public:
     int getInt(string key);
 
     bool hasError();
+
+    rapidjson::Document* getDocument();
 };
 
 

@@ -8,7 +8,7 @@
 #include "header/BasicRequestHandler.h"
 
 
-Server::Server(int port, ILogger *logger, IRequestHandler *handler, IController *controllers[], IRequestDTO* requestDto, IResponseDTO* responseDto) {
+Server::Server(int port, ILogger *logger, IRequestHandler *handler, IController* controllers[], IRequestDTO* requestDto, IResponseDTO* responseDto) {
     this->logger = logger;
     this->port = port;
     this->requestHandler = handler;
@@ -26,7 +26,7 @@ void Server::initRequestHandler(IRequestDTO* requestDto, IResponseDTO* responseD
     this->requestHandler->setResponseDTO(responseDto);
 }
 
-void Server::initControllers(IController *controllers[]) {
+void Server::initControllers(IController* controllers[]) {
     for(int i = 0; i < sizeof(controllers) / sizeof(IController *); i++) {
         IController *controller = controllers[i];
         controller->addRoute(this->requestHandler);
