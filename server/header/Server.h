@@ -7,22 +7,23 @@
 
 
 #include <netinet/in.h>
-#include "../interface/Logger.h"
+#include "../interface/ILogger.h"
+#include "../interface/IRequestHandler.h"
+#include "MultiProcessRequestHandler.h"
 
 class Server {
-public:
-    const char *const BROADCAST_ADDR = "0.0.0.0";
-    int port;
-    Logger *logger;
+private:
+    ILogger *logger;
+    IRequestHandler *requestHandler;
 
-    Server(int port);
-    Server(int port, Logger *logger);
+    void initRequestHandler();
+    void initControllers(IController *controllers[]);
+public:
+    int port;
+
+    Server(int port, ILogger *logger, IRequestHandler *handler, IController *controllers[]);
 
     void listen();
-
-private:
-    void start();
-    struct sockaddr_in *initSockAddr() const;
 };
 
 
