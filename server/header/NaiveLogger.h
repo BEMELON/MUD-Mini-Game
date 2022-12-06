@@ -6,9 +6,9 @@
 #define MUD_SERVER_NAIVELOGGER_H
 
 
-#include "../interface/Logger.h"
+#include "../interface/ILogger.h"
 
-class NaiveLogger: public Logger {
+class NaiveLogger: public ILogger {
 
     void logHeader() override;
     void logInfoMsg(std::string msg) override;

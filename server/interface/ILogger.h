@@ -2,12 +2,12 @@
 // Created by BEMELON on 22. 12. 5.
 //
 
-#ifndef MUD_SERVER_LOGGER_H
-#define MUD_SERVER_LOGGER_H
+#ifndef MUD_SERVER_ILOGGER_H
+#define MUD_SERVER_ILOGGER_H
 #define interface class
 #include <string>
 
-interface Logger {
+interface ILogger {
 public:
     virtual void logHeader() = 0;
 
@@ -17,4 +17,4 @@ public:
 };
 
 
-#endif //MUD_SERVER_LOGGER_H
+#endif //MUD_SERVER_ILOGGER_H
