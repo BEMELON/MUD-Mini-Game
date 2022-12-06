@@ -6,7 +6,6 @@
 #define MUD_SERVER_ICONTROLLER_H
 #include "IRequestHandler.h"
 #include "../header/rapidjson/document.h"
-
 #define interface class
 
 class IRequestHandler;

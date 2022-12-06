@@ -2,14 +2,14 @@
 // Created by BEMELON on 22. 12. 5.
 //
 
-#ifndef MUD_SERVER_NAIVELOGGER_H
+#ifndef MUD_SERVER_BASICLOGGER_H
 #define MUD_SERVER_NAIVELOGGER_H
 
 
 #include <string>
 #include "../interface/Logger.h"
 
-class NaiveLogger: public Logger {
+class BasicLogger: public Logger {
 
     void logHeader() override;
     void logInfoMsg(std::string msg) override;
@@ -17,4 +17,4 @@ class NaiveLogger: public Logger {
 };
 
 
-#endif //MUD_SERVER_NAIVELOGGER_H
+#endif //MUD_SERVER_BASICLOGGER_H

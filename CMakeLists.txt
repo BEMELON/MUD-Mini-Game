@@ -1,3 +1,3 @@
 project(MUD-Server)
-ADD_EXECUTABLE(server server/Server.cpp server/main.cpp server/JsonParser.cpp server/logger/NaiveLogger.cpp server/interface/IRepository.h server/EventHandler/MultiProcessRequestHandler.cpp server/interface/IController.h server/interface/ILogger.h server/interface/IRequestHandler.h server/controller/NaiveController.cpp server/header/NaiveController.h)
-ADD_EXECUTABLE(client client/src/NaiveLogger.cpp client/interface/Logger.h client/src/Client.cpp client/src/App.cpp server/interface/IController.h server/header/MultiProcessRequestHandler.h)
+ADD_EXECUTABLE(server server/Server.cpp server/main.cpp server/JsonParser.cpp server/logger/BasicLogger.cpp server/interface/IRepository.h server/EventHandler/BasicRequestHandler.cpp server/interface/IController.h server/interface/ILogger.h server/interface/IRequestHandler.h server/controller/BasicController.cpp server/header/BasicController.h)
+ADD_EXECUTABLE(client client/src/NaiveLogger.cpp client/interface/Logger.h client/src/Client.cpp client/src/App.cpp server/interface/IController.h server/header/BasicRequestHandler.h)
