@@ -12,8 +12,7 @@ private:
 
 public:
     void listen(int port) override;
-    void setLogger(ILogger *logger) override;
-    void addRoute(std::string path, void (IController::*fn_router)(rapidjson::Document *) , IController *caller) override;
+    void addRoute(std::string path, IResponseDTO* (IController::*fn_router)(IRequestDTO*, IResponseDTO*) , IController *caller) override;
 };
 
 #endif //MUD_SERVER_BASICREQUESTHANDLER_H

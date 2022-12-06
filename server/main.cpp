@@ -5,6 +5,8 @@
 #include "header/Server.h"
 #include "header/BasicLogger.h"
 #include "header/BasicController.h"
+#include "header/BasicRequestDto.h"
+#include "header/BasicResponseDto.h"
 
 using namespace std;
 
@@ -13,10 +15,11 @@ int main() {
     controllers[0] = new BasicController();
 
     Server server = Server(8080,
-                           new BasicLogger(),
-                           new BasicRequestHandler(),
-                          controllers
-    );
+                            new BasicLogger(),
+                            new BasicRequestHandler(),
+                            controllers,
+                            new BasicRequestDto(),
+                            new BasicResponseDto());
     server.listen();
 }
 

@@ -16,12 +16,12 @@ private:
     ILogger *logger;
     IRequestHandler *requestHandler;
 
-    void initRequestHandler();
+    void initRequestHandler(IRequestDTO* requestDto, IResponseDTO* responseDto);
     void initControllers(IController *controllers[]);
 public:
     int port;
 
-    Server(int port, ILogger *logger, IRequestHandler *handler, IController *controllers[]);
+    Server(int port, ILogger *logger, IRequestHandler *handler, IController *controllers[], IRequestDTO* requestDto, IResponseDTO* responseDto);
 
     void listen();
 };
