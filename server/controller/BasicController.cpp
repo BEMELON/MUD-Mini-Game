@@ -3,16 +3,15 @@
 //
 
 #include "../header/BasicController.h"
+#include "../header/BasicResponseDto.h"
 #include <iostream>
 
 void BasicController::addRoute(IRequestHandler *handler) {
     handler->addRoute("/", &IController::get, this);
 }
 
-rapidjson::Document* BasicController::get(rapidjson::Document *body) {
+IResponseDTO* BasicController::get(IRequestDTO* body, IResponseDTO* resp) {
     std::cout << "Hello BasicController!" << std::endl;
 
-    auto *document = new rapidjson::Document();
-
-    return document;
+    return new BasicResponseDto("success");
 }

@@ -11,7 +11,7 @@
 class BasicController: public IController {
 public:
     void addRoute(IRequestHandler *handler) override;
-    rapidjson::Document* get(rapidjson::Document *body) override;
+    IResponseDTO* get(IRequestDTO* body, IResponseDTO* resp) override;
 };
 
 

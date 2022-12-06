@@ -8,6 +8,8 @@
 #include "ILogger.h"
 #include "IController.h"
 #include "../header/rapidjson/document.h"
+#include "IResponseDTO.h"
+#include "IRequestDTO.h"
 #include <ext/hash_map>
 class IController;
 // for GNU HashMap
@@ -19,18 +21,34 @@ namespace __gnu_cxx {
         }
     };
 }
-typedef __gnu_cxx::hash_map<std::string,  rapidjson::Document* (IController::*)(rapidjson::Document *)> ROUTER_HASHMAP;
+typedef __gnu_cxx::hash_map<std::string, IResponseDTO* (IController::*)(IRequestDTO*,  IResponseDTO*)> ROUTER_HASHMAP;
 typedef __gnu_cxx::hash_map<std::string, IController *> CONTROLLER_HASHMAP;
 
 interface IRequestHandler {
 protected:
     int port;
     ILogger *logger;
+    IRequestDTO *requestDto;
+    IResponseDTO *responseDto;
     ROUTER_HASHMAP router;
     CONTROLLER_HASHMAP controller;
+
 public:
-    virtual void setLogger(ILogger *logger) = 0;
-    virtual void addRoute(std::string path, rapidjson::Document* (IController::*fn_router)(rapidjson::Document *parser), IController *caller) = 0;
+    void setLogger(ILogger *logger) {
+        this->logger = logger;
+    }
+
+    void setRequestDto(IRequestDTO *requestDto) {
+        this->requestDto = requestDto;
+    }
+
+    void setResponseDTO(IResponseDTO *responseDto) {
+        this->responseDto = responseDto;
+    }
+
+    virtual void addRoute(std::string path,
+                          IResponseDTO* (IController::*fn_router)(IRequestDTO* body,  IResponseDTO* resp),
+                          IController *caller) = 0;
     virtual void listen(int port) = 0;
 };
 
