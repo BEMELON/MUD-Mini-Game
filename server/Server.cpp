@@ -40,8 +40,7 @@ void Server::initConfig() {
 
     std::stringstream configBuffer;
     ifstream ifs;
-    // TODO: fix-me
-    ifs.open("/home/hgdkim2/Desktop/MUD-Mini-Game/server/config.json");
+    ifs.open("../server/config.json");
     configBuffer << ifs.rdbuf();
 
     configParser.parse(configBuffer.str());
