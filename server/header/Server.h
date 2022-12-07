@@ -10,18 +10,23 @@
 #include "../interface/ILogger.h"
 #include "../interface/IRequestHandler.h"
 #include "BasicRequestHandler.h"
+#include "../interface/IRepository.h"
 
 class Server {
 private:
     ILogger *logger;
     IRequestHandler *requestHandler;
+    int server_port;
+    std::string redis_addr;
+    int redis_port;
 
     void initRequestHandler(IRequestDTO* requestDto, IResponseDTO* responseDto);
     void initControllers(IController *controllers[]);
+    void initRepository(IRepository *repository);
+    void initConfig();
 public:
-    int port;
-
-    Server(int port, ILogger *logger, IRequestHandler *handler, IController *controllers[], IRequestDTO* requestDto, IResponseDTO* responseDto);
+    Server(ILogger *logger, IRequestHandler *handler, IController *controllers[],
+           IRequestDTO* requestDto, IResponseDTO* responseDto, IRepository *repository);
 
     void listen();
 };

@@ -9,19 +9,16 @@
 #include <iostream>
 #include <hash_map>
 #include "../header/BasicRequestHandler.h"
-#include "../header/BasicRequestDto.h"
-#include "../header/rapidjson/document.h"
+#include "../header/JsonParser.h"
 
 void BasicRequestHandler::listen(int port) {
     // Setup for Logging
-    this->logger->logHeader();
-    this->logger->logInfoMsg("Server started at port " + std::to_string(port));
     this->port = port;
 
     struct sockaddr_in server_addr, client_addr; // 서버/클라이언트 구조체
     int passive_fd, active_fd; // Passive / Active 소켓
     socklen_t client_len = 0; // Socket len (ignored)
-    rapidjson::Document document; // JSON parser
+    JsonParser jsonParser = JsonParser();
 
 
     char buffer[MAX_BUFFER]; // Buffer space for input
@@ -45,7 +42,8 @@ void BasicRequestHandler::listen(int port) {
 
     memset(&client_addr, 0, sizeof(struct sockaddr_in));
 
-    this->logger->logInfoMsg("Request Handler boot successful!");
+    this->logger->logInfoMsg("BasicRequestHandler Started!");
+    this->logger->logInfoMsg("Server started at port " + std::to_string(port));
 
     while (true) {
         if ((active_fd = accept(passive_fd, (struct sockaddr *)&client_addr, &client_len)) < 0)
@@ -55,20 +53,20 @@ void BasicRequestHandler::listen(int port) {
             this->logger->logSysErrorMsg("Fork Error");
 
         if (pid == 0) {
-            sprintf(msg, "[%d] Process forked !", getpid());
+            sprintf(msg, "User Connected, [%d] Process fork", getpid());
             this->logger->logInfoMsg(msg);
 
             if (read(active_fd, buffer, MAX_BUFFER) < 0)
                 this->logger->logSysErrorMsg("Read failed");
 
-            document.Parse(buffer);
-            if (document.HasParseError())
-                this->logger->logInfoMsg("JSON Parsing Error");
+            jsonParser.parse(buffer);
+            if (jsonParser.hasError())
+                this->logger->logSysErrorMsg("JSON Parsing Error");
 
             auto fn = this->router.find("/")->second;
             IController *controller = this->controller.find("/")->second;
 
-            this->requestDto->setDocument(&document);
+            this->requestDto->setDocument(jsonParser.getDocument());
             IResponseDTO* res = (controller->*fn)(this->requestDto, this->responseDto);
 
             if (send(active_fd, res->getJsonMsg().c_str(), res->getJsonMsg().size(), 0) < 0)
