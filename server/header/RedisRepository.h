@@ -6,10 +6,10 @@
 #define MUD_SERVER_REDISREPOSITORY_H
 
 
-#include "../interface/IRepository.h"
+#include "../interface/IDataRepository.h"
 #include "hiredis/hiredis.h"
 
-class RedisRepository: public IRepository {
+class RedisRepository: public IDataRepository {
 private:
     const int MAX_SESSION_SEC = 300;
     redisContext *conn;

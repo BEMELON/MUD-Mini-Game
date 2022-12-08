@@ -10,7 +10,7 @@
 #include "../interface/ILogger.h"
 #include "../interface/IRequestHandler.h"
 #include "BasicRequestHandler.h"
-#include "../interface/IRepository.h"
+#include "../interface/IDataRepository.h"
 
 class Server {
 private:
