@@ -7,14 +7,13 @@
 
 
 #include "../interface/IDataRepository.h"
-#include "hiredis/hiredis.h"
 
 class RedisRepository: public IDataRepository {
 private:
     const int MAX_SESSION_SEC = 300;
-    redisContext *conn;
 public:
     RedisRepository();
+
     bool connect(const char* addr, int port) override;
     void setLogger(ILogger *logger) override;
 };

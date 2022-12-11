@@ -6,16 +6,18 @@
 #define MUD_SERVER_IDATAREPOSITORY_H
 
 #include "ILogger.h"
-
+#include "hiredis/hiredis.h"
 #define interface class
 
 interface IDataRepository {
 protected:
     ILogger *logger;
 public:
+    // FIX-ME
+    redisContext* redis;
+
     virtual bool connect(const char* addr, int port) = 0;
     virtual void setLogger(ILogger *logger) = 0;
-    virtual 
 };
 
 

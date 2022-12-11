@@ -6,8 +6,17 @@
 #define MUD_SERVER_BASICUSERREPOSITORY_H
 
 
-class BasicUserRepository {
+#include "../interface/IUserRepository.h"
+#include "../interface/IDataRepository.h"
 
+class BasicUserRepository: public IUserRepository {
+public:
+    BasicUserRepository(IDataRepository* redisRepository, ILogger *iLogger);
+    User* createUser(User *user) override;
+    User* delUser(User *user) override;
+    list<User *> findAll() override;
+    User* findById(std::string userId) override;
+    User* updateUser(std::string userId, User *updatedUser) override;
 };
 
 

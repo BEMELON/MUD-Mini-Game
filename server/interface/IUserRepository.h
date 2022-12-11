@@ -6,23 +6,23 @@
 #define MUD_SERVER_IUserRepository_H
 
 #include <string>
+#include <hiredis/hiredis.h>
 #include "../header/User.h"
+#include "IDataRepository.h"
 
 #define interface class
 
 interface IUserRepository {
 protected:
-    virtual User* CMD(std::string cmd) = 0;
+    IDataRepository *dataRepository;
+    ILogger *logger;
 public:
-    virtual User* create(std::string userId) = 0;
-    virtual User* login(std::string userId) = 0;
-    virtual User* logout(std::string userId) = 0;
-    virtual User* move(User *user, Coordinate vector) = 0;
-    virtual User* attack(User *user) = 0;
-    virtual User* chat(User *src, User *target, std::string content) = 0;
-    virtual User* addPotion(User *user, IPotion potion) = 0;
-    virtual User* usePotion(User *user, )
+    virtual User* createUser(User* user) = 0;
+    virtual User* updateUser(std::string userId, User* updatedUser) = 0;
+    virtual User* delUser(User *user) = 0;
 
+    virtual User* findById(std::string userId) = 0;
+    virtual std::list<User *> findAll() = 0;
 };
 
 #endif //MUD_SERVER_IUserRepository_H

@@ -6,14 +6,19 @@
 #include <sstream>
 #include "header/Server.h"
 #include "header/JsonParser.h"
+#include "header/BasicUserRepository.h"
 
 
-Server::Server(ILogger *logger, IRequestHandler *handler, IController* controllers[], IRequestDTO* requestDto, IResponseDTO* responseDto, IRepository *repository) {
+Server::Server(ILogger *logger,
+               IRequestHandler *handler,
+               IController* controllers[],
+               IRequestDTO* requestDto, IResponseDTO* responseDto,
+               IDataRepository *repository) {
     logger->logHeader();
     this->logger = logger;
     this->requestHandler = handler;
     this->initConfig();
-    this->initRepository(repository);
+    this->initDataRepository(repository);
     this->initRequestHandler(requestDto, responseDto);
     this->initControllers(controllers);
 }
@@ -33,6 +38,13 @@ void Server::initControllers(IController* controllers[]) {
         IController *controller = controllers[i];
         controller->addRoute(this->requestHandler);
     }
+
+    //test
+    BasicUserRepository *temp = new BasicUserRepository(this->dataRepository, this->logger);
+//    temp->createUser(new User("test1"));
+    User *user = temp->findById("test1");
+    user->setHp(20);
+    temp->updateUser("test1", user);
 }
 
 void Server::initConfig() {
@@ -52,9 +64,10 @@ void Server::initConfig() {
         this->server_port = configParser.getInt("server-port");
 }
 
-void Server::initRepository(IRepository *repository) {
+void Server::initDataRepository(IDataRepository *repository) {
+    this->dataRepository = repository;
     bool connected;
 
-    repository->setLogger(this->logger);
-    connected = repository->connect(this->redis_addr.c_str(), this->redis_port);
+    this->dataRepository->setLogger(this->logger);
+    connected = this->dataRepository->connect(this->redis_addr.c_str(), this->redis_port);
 }

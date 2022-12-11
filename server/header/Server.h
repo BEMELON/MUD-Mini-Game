@@ -14,19 +14,20 @@
 
 class Server {
 private:
-    ILogger *logger;
-    IRequestHandler *requestHandler;
-    int server_port;
-    std::string redis_addr;
-    int redis_port;
+    ILogger*            logger;
+    IRequestHandler*    requestHandler;
+    IDataRepository*    dataRepository;
+    int                 server_port;
+    int                 redis_port;
+    std::string         redis_addr;
 
     void initRequestHandler(IRequestDTO* requestDto, IResponseDTO* responseDto);
-    void initControllers(IController *controllers[]);
-    void initRepository(IRepository *repository);
+    void initControllers(IController* controllers[]);
+    void initDataRepository(IDataRepository* repository);
     void initConfig();
 public:
-    Server(ILogger *logger, IRequestHandler *handler, IController *controllers[],
-           IRequestDTO* requestDto, IResponseDTO* responseDto, IRepository *repository);
+    Server(ILogger* logger, IRequestHandler* handler, IController* controllers[],
+           IRequestDTO* requestDto, IResponseDTO* responseDto, IDataRepository* repository);
 
     void listen();
 };
