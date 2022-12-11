@@ -6,9 +6,11 @@
 
 User::User(string id) {
     this->id = id;
+    this->hp = 30;
+    this->str = 3;
 }
 
-int User::getHp() {
+int User::getHp() const {
     return this->hp;
 }
 
@@ -17,21 +19,14 @@ string User::getId() {
 }
 
 
-int User::getStr() {
+int User::getStr() const {
     return this->str;
 }
 
 Coordinate User::getPos() {
-    return Coordinate(this->pos.getX(), this->pos.getY());
+    return {this->pos.getX(), this->pos.getY()};
 }
 
-void User::addHp(int diff) {
-    this->hp += diff;
-}
-
-void User::addstr(int diff) {
-    this->str += diff;
-}
 
 void User::setHp(int hp) {
     this->hp = hp;
@@ -49,15 +44,10 @@ void User::setPos(int x, int y) {
     this->pos = Coordinate(x, y);
 }
 
-void User::move(int vec_x, int vec_y) {
-    this->setPos(this->getPos().getX() + vec_x,
-                 this->getPos().getY() + vec_y);
+void User::addPotion(IPotion* potion) {
+    this->potions.push_back(potion);
 }
 
-void User::addHpPotion(Potion_hp potion) {
-    hp_potions.push_back(potion);
-}
-
-void User::addStrPotion(Potion_str potion) {
-    str_potions.push_back(potion);
+list<IPotion *> User::getPotions() {
+    return this->potions;
 }

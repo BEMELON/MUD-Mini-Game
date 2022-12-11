@@ -5,5 +5,4 @@
 #include "../header/Potion_str.h"
 
 void Potion_str::action(User *user) {
-    user->addstr(3);
 }

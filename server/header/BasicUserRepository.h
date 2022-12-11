@@ -1,0 +1,14 @@
+//
+// Created by BEMELON on 22. 12. 8.
+//
+
+#ifndef MUD_SERVER_BASICUSERREPOSITORY_H
+#define MUD_SERVER_BASICUSERREPOSITORY_H
+
+
+class BasicUserRepository {
+
+};
+
+
+#endif //MUD_SERVER_BASICUSERREPOSITORY_H

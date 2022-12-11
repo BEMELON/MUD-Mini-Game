@@ -5,5 +5,5 @@
 #include "../header/Potion_hp.h"
 
 void Potion_hp::action(User *user) {
-    user->addHp(10);
+//    user->addHp(10);
 }
