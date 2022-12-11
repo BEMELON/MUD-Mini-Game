@@ -34,17 +34,11 @@ void Server::initRequestHandler(IRequestDTO* requestDto, IResponseDTO* responseD
 }
 
 void Server::initControllers(IController* controllers[]) {
-    for(int i = 0; i < sizeof(controllers) / sizeof(IController *); i++) {
+    // FIX-ME
+    for(int i = 0; i < 2; i++) {
         IController *controller = controllers[i];
         controller->addRoute(this->requestHandler);
     }
-
-    //test
-    BasicUserRepository *temp = new BasicUserRepository(this->dataRepository, this->logger);
-//    temp->createUser(new User("test1"));
-    User *user = temp->findById("test1");
-    user->setHp(20);
-    temp->updateUser("test1", user);
 }
 
 void Server::initConfig() {
