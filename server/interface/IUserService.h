@@ -1,0 +1,8 @@
+//
+// Created by BEMELON on 22. 12. 11.
+//
+
+#ifndef MUD_SERVER_IUSERSERVICE_H
+#define MUD_SERVER_IUSERSERVICE_H
+
+#endif //MUD_SERVER_IUSERSERVICE_H
