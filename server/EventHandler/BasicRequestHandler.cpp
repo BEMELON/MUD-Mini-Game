@@ -56,15 +56,16 @@ void BasicRequestHandler::listen(int port) {
             sprintf(msg, "User Connected, [%d] Process fork", getpid());
             this->logger->logInfoMsg(msg);
 
-            if (read(active_fd, buffer, MAX_BUFFER) < 0)
+            if (recv(active_fd, buffer, MAX_BUFFER, 0) < 0)
                 this->logger->logSysErrorMsg("Read failed");
 
             jsonParser.parse(buffer);
-            if (jsonParser.hasError())
+            if (jsonParser.hasError() || !jsonParser.has("Request URL"))
                 this->logger->logSysErrorMsg("JSON Parsing Error");
 
-            auto fn = this->router.find("/")->second;
-            IController *controller = this->controller.find("/")->second;
+            string url = jsonParser.getString("Request URL");
+            auto fn = this->router.find(url)->second;
+            IController *controller = this->controller.find(url)->second;
 
             this->requestDto->setDocument(jsonParser.getDocument());
             IResponseDTO* res = (controller->*fn)(this->requestDto, this->responseDto);
