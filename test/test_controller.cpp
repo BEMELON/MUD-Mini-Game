@@ -48,3 +48,41 @@ TEST(USER_CONTROLLER, GET_ROOT) {
 
     closeConn(fd);
 }
+
+TEST(USER_CONTROLLER, GET_ROOT2) {
+    int fd = getConn();
+    char buffer[256];
+    memset(buffer, 0, 256);
+
+    JsonBuilder jsonBuilder = JsonBuilder();
+    jsonBuilder.add("Request URL", "/user/");
+    std::string json = jsonBuilder.build();
+    send(fd, json.c_str(), json.length(), 0);
+
+
+    recv(fd, buffer, 256, 0);
+    JsonParser jsonParser = JsonParser();
+    jsonParser.parse(buffer);
+    EXPECT_TRUE(jsonParser.has("status"));
+
+    closeConn(fd);
+}
+
+TEST(USER_CONTROLLER, GET_ROOT3) {
+    int fd = getConn();
+    char buffer[256];
+    memset(buffer, 0, 256);
+
+    JsonBuilder jsonBuilder = JsonBuilder();
+    jsonBuilder.add("Request URL", "/user/test");
+    std::string json = jsonBuilder.build();
+    send(fd, json.c_str(), json.length(), 0);
+
+
+    recv(fd, buffer, 256, 0);
+    JsonParser jsonParser = JsonParser();
+    jsonParser.parse(buffer);
+    EXPECT_TRUE(jsonParser.has("status"));
+
+    closeConn(fd);
+}
