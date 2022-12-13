@@ -9,6 +9,7 @@
 #include "../interface/IController.h"
 
 class UserController : public IController {
+    void setService(IUserService* iUserService) override;
     void addRoute(IRequestHandler* handler) override;
     IResponseDTO * get(IRequestDTO* body, IResponseDTO* resp) override;
     void setLogger(ILogger *iLogger) override;

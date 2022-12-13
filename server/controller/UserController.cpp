@@ -10,7 +10,11 @@ void UserController::addRoute(IRequestHandler *handler) {
 }
 
 bool UserController::login(IRequestDTO* &body, IResponseDTO* &resp) {
-    cout << "Hello User Login" << endl;
+    if (!body->has("userId"))
+        return false;
+
+    std::string userId = body->getString("userId");
+
     return true;
 }
 
@@ -65,4 +69,8 @@ IResponseDTO *UserController::get(IRequestDTO *body, IResponseDTO *resp) {
 
 void UserController::setLogger(ILogger *iLogger) {
     this->logger = iLogger;
+}
+
+void UserController::setService(IUserService* iUserService) {
+    this->userService = iUserService;
 }
