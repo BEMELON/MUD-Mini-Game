@@ -13,6 +13,8 @@ private:
 public:
     void listen(int port) override;
     void addRoute(std::string path, IResponseDTO* (IController::*fn_router)(IRequestDTO*, IResponseDTO*) , IController *caller) override;
+
+    string getRoot(string path);
 };
 
 #endif //MUD_SERVER_BASICREQUESTHANDLER_H

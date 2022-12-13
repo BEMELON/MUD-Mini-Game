@@ -15,8 +15,8 @@ private:
 public:
     JsonBuilder();
 
-    JsonBuilder &add(string key, string value);
-    JsonBuilder &add(string key, int value);
+    JsonBuilder &add(const string& key, const string& value);
+    JsonBuilder &add(const string& key, int value);
 
     string build();
 };
