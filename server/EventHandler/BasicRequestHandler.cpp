@@ -56,6 +56,7 @@ void BasicRequestHandler::listen(int port) {
             sprintf(msg, "User Connected, [%d] Process fork", getpid());
             this->logger->logInfoMsg(msg);
 
+            memset(buffer, 0, MAX_BUFFER);
             if (recv(active_fd, buffer, MAX_BUFFER, 0) < 0)
                 this->logger->logSysErrorMsg("Read failed");
 
