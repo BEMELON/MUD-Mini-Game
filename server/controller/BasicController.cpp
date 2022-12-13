@@ -15,3 +15,7 @@ IResponseDTO* BasicController::get(IRequestDTO* body, IResponseDTO* resp) {
 
     return resp->setStatus("success");
 }
+
+void BasicController::setLogger(ILogger *iLogger) {
+    this->logger = iLogger;
+}

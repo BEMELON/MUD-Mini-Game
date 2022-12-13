@@ -12,6 +12,7 @@ class BasicController: public IController {
 public:
     void addRoute(IRequestHandler *handler) override;
     IResponseDTO* get(IRequestDTO* body, IResponseDTO* resp) override;
+    void setLogger(ILogger *iLogger) override;
 };
 
 

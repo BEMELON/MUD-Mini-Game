@@ -17,7 +17,7 @@ protected:
 public:
     virtual void addRoute(IRequestHandler* handler) = 0;
     virtual IResponseDTO*  get(IRequestDTO* body, IResponseDTO* resp) = 0;
-    virtual void setLogger(ILogger* iLogger);
+    virtual void setLogger(ILogger* iLogger) = 0;
 };
 
 

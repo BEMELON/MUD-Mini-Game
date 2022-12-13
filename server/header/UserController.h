@@ -14,8 +14,11 @@ class UserController : public IController {
     void setLogger(ILogger *iLogger) override;
 
     bool login(IRequestDTO* &body, IResponseDTO* &resp);
-
     bool getAllUser(IRequestDTO* &body, IResponseDTO* &resp);
+    bool getUserInfo(IRequestDTO* &body, IResponseDTO* &resp);
+    bool moveUser(IRequestDTO* &body, IResponseDTO* &resp);
+    bool attack(IRequestDTO* &body, IResponseDTO* &resp);
+    bool sendMsg(IRequestDTO* &body, IResponseDTO* &resp);
 };
 
 

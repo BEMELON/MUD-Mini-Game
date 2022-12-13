@@ -45,17 +45,18 @@ TEST(USER_CONTROLLER, GET_ROOT) {
     JsonParser jsonParser = JsonParser();
     jsonParser.parse(buffer);
     EXPECT_TRUE(jsonParser.has("status"));
+    EXPECT_STREQ(jsonParser.getString("status").c_str(), "success");
 
     closeConn(fd);
 }
 
-TEST(USER_CONTROLLER, GET_ROOT2) {
+TEST(USER_CONTROLLER, POST_LOGIN) {
     int fd = getConn();
     char buffer[256];
     memset(buffer, 0, 256);
 
     JsonBuilder jsonBuilder = JsonBuilder();
-    jsonBuilder.add("Request URL", "/user/");
+    jsonBuilder.add("Request URL", "/user/login");
     std::string json = jsonBuilder.build();
     send(fd, json.c_str(), json.length(), 0);
 
@@ -64,17 +65,18 @@ TEST(USER_CONTROLLER, GET_ROOT2) {
     JsonParser jsonParser = JsonParser();
     jsonParser.parse(buffer);
     EXPECT_TRUE(jsonParser.has("status"));
+    EXPECT_STREQ(jsonParser.getString("status").c_str(), "success");
 
     closeConn(fd);
 }
 
-TEST(USER_CONTROLLER, GET_ROOT3) {
+TEST(USER_CONTROLLER, GET_USER_INFO) {
     int fd = getConn();
     char buffer[256];
     memset(buffer, 0, 256);
 
     JsonBuilder jsonBuilder = JsonBuilder();
-    jsonBuilder.add("Request URL", "/user/test");
+    jsonBuilder.add("Request URL", "/user/1");
     std::string json = jsonBuilder.build();
     send(fd, json.c_str(), json.length(), 0);
 
@@ -83,6 +85,67 @@ TEST(USER_CONTROLLER, GET_ROOT3) {
     JsonParser jsonParser = JsonParser();
     jsonParser.parse(buffer);
     EXPECT_TRUE(jsonParser.has("status"));
+    EXPECT_STREQ(jsonParser.getString("status").c_str(), "success");
+
+    closeConn(fd);
+}
+
+TEST(USER_CONTROLLER, MOVE_USER) {
+    int fd = getConn();
+    char buffer[256];
+    memset(buffer, 0, 256);
+
+    JsonBuilder jsonBuilder = JsonBuilder();
+    jsonBuilder.add("Request URL", "/user/1/move");
+    std::string json = jsonBuilder.build();
+    send(fd, json.c_str(), json.length(), 0);
+
+
+    recv(fd, buffer, 256, 0);
+    JsonParser jsonParser = JsonParser();
+    jsonParser.parse(buffer);
+    EXPECT_TRUE(jsonParser.has("status"));
+    EXPECT_STREQ(jsonParser.getString("status").c_str(), "success");
+
+    closeConn(fd);
+}
+
+TEST(USER_CONTROLLER, USER_ATTACK) {
+    int fd = getConn();
+    char buffer[256];
+    memset(buffer, 0, 256);
+
+    JsonBuilder jsonBuilder = JsonBuilder();
+    jsonBuilder.add("Request URL", "/user/1/attack");
+    std::string json = jsonBuilder.build();
+    send(fd, json.c_str(), json.length(), 0);
+
+
+    recv(fd, buffer, 256, 0);
+    JsonParser jsonParser = JsonParser();
+    jsonParser.parse(buffer);
+    EXPECT_TRUE(jsonParser.has("status"));
+    EXPECT_STREQ(jsonParser.getString("status").c_str(), "success");
+
+    closeConn(fd);
+}
+
+TEST(USER_CONTROLLER, USER_SEND_MSG) {
+    int fd = getConn();
+    char buffer[256];
+    memset(buffer, 0, 256);
+
+    JsonBuilder jsonBuilder = JsonBuilder();
+    jsonBuilder.add("Request URL", "/user/1/sendMsg");
+    std::string json = jsonBuilder.build();
+    send(fd, json.c_str(), json.length(), 0);
+
+
+    recv(fd, buffer, 256, 0);
+    JsonParser jsonParser = JsonParser();
+    jsonParser.parse(buffer);
+    EXPECT_TRUE(jsonParser.has("status"));
+    EXPECT_STREQ(jsonParser.getString("status").c_str(), "success");
 
     closeConn(fd);
 }
