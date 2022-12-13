@@ -10,7 +10,7 @@ JsonBuilder::JsonBuilder() {
     d.SetObject();
 };
 
-JsonBuilder &JsonBuilder::add(string key, int value) {
+JsonBuilder &JsonBuilder::add(const string& key, int value) {
     rapidjson::Value vName(rapidjson::kStringType);
     vName.SetString(key.c_str(), d.GetAllocator());
 
@@ -22,7 +22,7 @@ JsonBuilder &JsonBuilder::add(string key, int value) {
     return *this;
 }
 
-JsonBuilder &JsonBuilder::add(string key, string value) {
+JsonBuilder &JsonBuilder::add(const string& key, const string& value) {
     rapidjson::Value vName(rapidjson::kStringType);
     vName.SetString(key.c_str(), d.GetAllocator());
 
