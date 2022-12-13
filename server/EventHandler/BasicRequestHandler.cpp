@@ -60,14 +60,13 @@ void BasicRequestHandler::listen(int port) {
                 this->logger->logSysErrorMsg("Read failed");
 
             jsonParser.parse(buffer);
-            if (jsonParser.hasError() || !jsonParser.has("Request URL"))
-                this->logger->logSysErrorMsg("JSON Parsing Error");
 
-            string url = jsonParser.getString("Request URL");
-            auto fn = this->router.find(url)->second;
-            IController *controller = this->controller.find(url)->second;
+            string url = jsonParser.getString("Request URL"); // /user/create
+            string root = getRoot(url);
+            auto fn = this->router.find(root)->second;
+            IController *controller = this->controller.find(root)->second;
 
-            this->requestDto->setDocument(jsonParser.getDocument());
+            this->requestDto->setBody(buffer);
             IResponseDTO* res = (controller->*fn)(this->requestDto, this->responseDto);
 
             if (send(active_fd, res->getJsonMsg().c_str(), res->getJsonMsg().size(), 0) < 0)
@@ -75,6 +74,16 @@ void BasicRequestHandler::listen(int port) {
             exit(EXIT_SUCCESS);
         }
     }
+}
+
+string BasicRequestHandler::getRoot(string path) {
+    int first_slash = path.find('/', 0);
+    int second_slash = path.find('/', first_slash + 1);
+
+    if (second_slash == string::npos)
+        return path.substr(first_slash);
+    else
+        return path.substr(first_slash, second_slash - first_slash);
 }
 
 void BasicRequestHandler::addRoute(std::string path, IResponseDTO* (IController::*fn_router)(IRequestDTO*, IResponseDTO*), IController *caller) {
