@@ -6,8 +6,16 @@
 #define MUD_SERVER_USERCONTROLLER_H
 
 
-class UserController {
+#include "../interface/IController.h"
 
+class UserController : public IController {
+    void addRoute(IRequestHandler* handler) override;
+    IResponseDTO * get(IRequestDTO* body, IResponseDTO* resp) override;
+    void setLogger(ILogger *iLogger) override;
+
+    bool login(IRequestDTO* &body, IResponseDTO* &resp);
+
+    bool getAllUser(IRequestDTO* &body, IResponseDTO* &resp);
 };
 
 

@@ -38,6 +38,7 @@ void Server::initControllers(IController* controllers[]) {
     for(int i = 0; i < 2; i++) {
         IController *controller = controllers[i];
         controller->addRoute(this->requestHandler);
+        controller->setLogger(this->logger);
     }
 }
 
