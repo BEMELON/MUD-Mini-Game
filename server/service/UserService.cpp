@@ -10,7 +10,8 @@ UserService::UserService() {
 
 User* UserService::login(string userId) {
     User *user = this->userRepository->findById(userId);
-
+    if (user == nullptr)
+        user = this->userRepository->createUser(new User(userId));
     return (user);
 }
 

@@ -8,7 +8,7 @@
 #include "../server/header/JsonBuilder.h"
 #include "../server/header/JsonParser.h"
 
-int getConn() {
+static int getConn() {
     int fd;
     struct sockaddr_in server;
 
@@ -26,7 +26,7 @@ int getConn() {
     return fd;
 }
 
-void closeConn(int fd) {
+static void closeConn(int fd) {
     close(fd);
 }
 
