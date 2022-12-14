@@ -9,6 +9,8 @@
 #include "../interface/IUserController.h"
 
 class UserController : public IUserController {
+private:
+    string getUserId(const string &path);
 protected:
     IUserService* userService;
 public:

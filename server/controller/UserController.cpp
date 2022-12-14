@@ -15,10 +15,10 @@ void UserController::addRoute(IRequestHandler *handler) {
 
 bool UserController::login(IRequestDTO* &body, IResponseDTO* &resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][login] called");
+    string userId = getUserId(body->getString("Request URL"));
     if (!body->has("userId"))
         return false;
 
-    std::string userId = body->getString("userId");
     User* user = this->userService->login(userId);
 
     if (user == nullptr)
@@ -40,21 +40,25 @@ bool UserController::getUserInfo(IRequestDTO* &body, IResponseDTO* &resp) {
 
 bool UserController::moveUser(IRequestDTO* &body, IResponseDTO* &resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][moveUser] called");
-    if (!body->has("user"))
-        return false;
+    if (!body->has("direction")) return false;
 
-    User* user = body->getUser();
-    bool status = this->userService->updateUser(user);
+    string userId = getUserId(body->getString("Request URL"));
+    User* user = this->userService->login(userId);
+    if (user == nullptr) return false;
+    string direction = body->getString("direction");
+    bool status = this->userService->moveUser(user, direction);
+
+    resp->setUser((*this->userService->login(userId)));
     return status;
 }
 
 bool UserController::attack(IRequestDTO *&body, IResponseDTO *&resp) {
-    cout << "Hello attack" << endl;
+    this->logger->logInfoMsg("[DEBUG][UserController][attack] called");
     return true;
 }
 
 bool UserController::sendMsg(IRequestDTO *&body, IResponseDTO *&resp) {
-    cout << "Hello sendMsg" << endl;
+    this->logger->logInfoMsg("[DEBUG][UserController][sendMsg] called");
     return true;
 }
 
@@ -89,4 +93,12 @@ void UserController::setLogger(ILogger *iLogger) {
 
 void UserController::setUserService(IUserService *iUserService) {
     this->userService = iUserService;
+}
+
+string UserController::getUserId(const string &path) {
+    int first_slash = path.find('/', 0);
+    int second_slash = path.find('/', first_slash + 1);
+    int third_slash = path.find('/', second_slash);
+
+    return path.substr(second_slash + 1, third_slash);
 }

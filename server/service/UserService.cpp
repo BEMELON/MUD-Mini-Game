@@ -31,3 +31,24 @@ bool UserService::updateUser(User *user) {
     this->userRepository->updateUser(origin_user->getId(), user);
     return true;
 }
+
+bool UserService::moveUser(User* pUser, string direction) {
+    int vec_x = 0;
+    int vec_y = 0;
+    if (direction == "UP") {
+        vec_y = 1;
+    } else if (direction == "DOWN") {
+        vec_y = -1;
+    } else if (direction == "RIGHT") {
+        vec_x = 1;
+    } else if (direction == "LEFT") {
+        vec_x = -1;
+    } else {
+        return false;
+    }
+
+    Coordinate org_pos = pUser->getPos();
+    pUser->setPos(org_pos.getX() + vec_x, org_pos.getY() + vec_y);
+
+    this->userRepository->updateUser(pUser->getId(), pUser);
+}

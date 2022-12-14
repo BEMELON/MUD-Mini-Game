@@ -16,6 +16,7 @@ public:
     void setLogger(ILogger *iLogger) override;
     void setUserRepository(IUserRepository *iUserRepository) override;
     bool updateUser(User *user) override;
+    bool moveUser(User *pUser, string direction) override;
 };
 
 
