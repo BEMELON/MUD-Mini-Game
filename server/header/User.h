@@ -24,6 +24,7 @@ private:
     int hp;
     int str;
     list<IPotion *> potions;
+    list<string> msgs;
 
     void addPotion(IPotion* potion);
 public:
@@ -49,6 +50,12 @@ public:
     void setStrPotion(int cnt);
     list<HpPotion *> getHpPotions();
     list<StrPotion *> getStrPotions();
+
+    // Messages
+    list<string> getMessages();
+    void setMessages(list<string> &messages);
+    void addMessages(string &message);
+    string popMessage();
 };
 
 

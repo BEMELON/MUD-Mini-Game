@@ -97,3 +97,25 @@ void User::setStrPotion(int cnt) {
         diff -= 1;
     }
 }
+
+list<string> User::getMessages() {
+    return this->msgs;
+}
+
+void User::setMessages(list<string> &messages) {
+    this->msgs = messages;
+}
+
+void User::addMessages(string &message) {
+    msgs.push_back(message);
+}
+
+string User::popMessage() {
+    if (msgs.empty()) {
+        return "";
+    }
+
+    string msg = msgs.front();
+    msgs.pop_front();
+    return msg;
+}
