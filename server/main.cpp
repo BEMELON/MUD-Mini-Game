@@ -12,6 +12,7 @@
 #include "header/BasicUserRepository.h"
 #include "interface/IUserController.h"
 #include "header/EpollEventHandler.h"
+#include "header/HealthController.h"
 
 using namespace std;
 
@@ -22,6 +23,8 @@ int main() {
     IResponseDTO* responseDto = new BasicResponseDto();
     IDataRepository* dataRepository = new RedisRepository();
 
+    IController* healthController = new HealthController();
+
     // user stack
     IUserController* userController = new UserController();
     IUserRepository* userRepository = new BasicUserRepository();
@@ -30,6 +33,7 @@ int main() {
     Server server = Server(logger);
     server.setDataRepository(dataRepository);
     server.setEventHandler(requestHandler, requestDto, responseDto);
+    server.setHealthController(healthController);
     server.setUserStack(userController, userService, userRepository);
 
     server.listen();

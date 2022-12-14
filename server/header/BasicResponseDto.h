@@ -20,6 +20,7 @@ public:
     IResponseDTO* setStatus(const char *status) override;
     void addUsers(list<User> users) override;
     void setUser(User user) override;
+    void clean() override;
 };
 
 

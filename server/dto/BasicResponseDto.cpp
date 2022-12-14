@@ -25,3 +25,7 @@ void BasicResponseDto::setUser(User user) {
     jsonBuilder.setUser(user);
 }
 
+void BasicResponseDto::clean() {
+    jsonBuilder.clean();
+}
+

@@ -96,3 +96,7 @@ rapidjson::Value JsonBuilder::buildUser(User &user) {
 
     return json;
 }
+
+void JsonBuilder::clean() {
+    d.Swap(Value(kObjectType).Move());
+}

@@ -26,6 +26,7 @@ private:
     int                 server_port;
     int                 redis_port;
     std::string         redis_addr;
+    IController*        healthController;
 
     void initDataRepository();
     void initConfig();
@@ -35,6 +36,7 @@ public:
     void setEventHandler(IRequestHandler *handler, IRequestDTO *requestDto, IResponseDTO *responseDto);
     void setDataRepository(IDataRepository* dataRepository);
     void setUserStack(IUserController* iUserController, IUserService* iUserService, IUserRepository* iUserRepository);
+    void setHealthController(IController* iController);
     void listen();
 };
 

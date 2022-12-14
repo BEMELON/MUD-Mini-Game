@@ -18,6 +18,7 @@ public:
 
     virtual void addUsers(list<User> users) = 0;
     virtual void setUser(User user) = 0;
+    virtual void clean() = 0;
 };
 
 #endif //MUD_SERVER_IRESPONSEDTO_H
