@@ -7,6 +7,13 @@
 UserService::UserService() {
 }
 
+void UserService::setLogger(ILogger *iLogger) {
+    this->logger = iLogger;
+}
+
+void UserService::setUserRepository(IUserRepository *iUserRepository) {
+    this->userRepository = iUserRepository;
+}
 
 User* UserService::login(string userId) {
     User *user = this->userRepository->findById(userId);
@@ -15,10 +22,12 @@ User* UserService::login(string userId) {
     return (user);
 }
 
-void UserService::setLogger(ILogger *iLogger) {
-    this->logger = iLogger;
-}
 
-void UserService::setUserRepository(IUserRepository *iUserRepository) {
-    this->userRepository = iUserRepository;
+bool UserService::updateUser(User *user) {
+    User* origin_user = this->userRepository->findById(user->getId());
+    if (origin_user == nullptr)
+        return false;
+
+    this->userRepository->updateUser(origin_user->getId(), user);
+    return true;
 }

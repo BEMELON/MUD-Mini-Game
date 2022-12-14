@@ -15,6 +15,7 @@ public:
     User* login(string userId) override;
     void setLogger(ILogger *iLogger) override;
     void setUserRepository(IUserRepository *iUserRepository) override;
+    bool updateUser(User *user) override;
 };
 
 

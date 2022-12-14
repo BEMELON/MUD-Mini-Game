@@ -7,6 +7,7 @@
 
 
 #include "../interface/IRequestDTO.h"
+#include "User.h"
 
 class BasicRequestDto: public IRequestDTO {
 private:
@@ -16,6 +17,7 @@ public:
     bool has(const std::string &key) override;
     std::string getString(const std::string &key) override;
     void setBody(const std::string &body) override;
+    User* getUser() override;
 };
 
 

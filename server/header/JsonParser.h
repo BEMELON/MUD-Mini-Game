@@ -6,6 +6,7 @@
 #define MUD_SERVER_JSONPARSER_H
 #include <iostream>
 #include "rapidjson/document.h"
+#include "User.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ public:
 
     string getString(const string& key);
     int getInt(const string& key);
-
+    User* getUser(const string& key);
     bool hasError() const;
 
     rapidjson::Document* getDocument();

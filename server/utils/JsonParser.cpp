@@ -7,6 +7,7 @@
 
 JsonParser::JsonParser() = default;
 
+using namespace rapidjson;
 void JsonParser::parse(const string &raw) {
     this->d.Parse(raw.c_str());
 
@@ -31,4 +32,18 @@ string JsonParser::getString(const string& key) {
 
 int JsonParser::getInt(const string& key) {
     return d[key.c_str()].GetInt();
+}
+
+User *JsonParser::getUser(const string &key) {
+    const Value& user_json = d["user"].GetObject();
+    User* user = new User(user_json["id"].GetString());
+    user->setStr(std::stoi(user_json["str"].GetString()));
+    user->setHp(std::stoi(user_json["hp"].GetString()));
+    user->setStrPotion(std::stoi(user_json["str-potion"].GetString()));
+    user->setHpPotion(std::stoi(user_json["hp-potion"].GetString()));
+    int x = std::stoi(user_json["x"].GetString());
+    int y = std::stoi(user_json["y"].GetString());
+    user->setPos(x, y);
+
+    return user;
 }

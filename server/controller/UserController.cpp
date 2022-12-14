@@ -39,7 +39,12 @@ bool UserController::getUserInfo(IRequestDTO* &body, IResponseDTO* &resp) {
 
 bool UserController::moveUser(IRequestDTO* &body, IResponseDTO* &resp) {
     cout << "Hello moveUser" << endl;
-    return true;
+    if (!body->has("user"))
+        return false;
+
+    User* user = body->getUser();
+    bool status = this->userService->updateUser(user);
+    return status;
 }
 
 bool UserController::attack(IRequestDTO *&body, IResponseDTO *&resp) {
@@ -60,16 +65,17 @@ IResponseDTO *UserController::get(IRequestDTO *body, IResponseDTO *resp) {
         status = getAllUser(body, resp);
     } else if (std::regex_match(path, std::regex("/user/login"))) {
         status = login(body, resp);
-    } else if (std::regex_match(path, std::regex("/user/\\d*"))) {
-        status = getUserInfo(body, resp);
-    } else if (std::regex_match(path, std::regex("/user/\\d*/move"))) {
+    } else if (std::regex_match(path, std::regex("/user/[^/]+/move"))) {
         status = moveUser(body, resp);
-    } else if (std::regex_match(path, std::regex("/user/\\d*/attack"))) {
+    } else if (std::regex_match(path, std::regex("/user/[^/]+/attack"))) {
         status = attack(body, resp);
-    } else if  (std::regex_match(path, std::regex("/user/\\d*/sendMsg"))) {
+    } else if  (std::regex_match(path, std::regex("/user/[^/]+/sendMsg"))) {
         status = sendMsg(body, resp);
+    } else if (std::regex_match(path, std::regex("/user/[^/]+"))) {
+        status = getUserInfo(body, resp);
     } else {
         this->logger->logInfoMsg("Not handled by UserController ");
+        status = false;
     }
     if (status)
         return resp->setStatus("success");

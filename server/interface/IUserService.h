@@ -16,5 +16,6 @@ public:
     virtual void setLogger(ILogger *iLogger) = 0;
     virtual void setUserRepository(IUserRepository* iUserRepository) = 0;
     virtual User* login(string userId) = 0;
+    virtual bool updateUser(User *user) = 0;
 };
 #endif //MUD_SERVER_IUSERSERVICE_H

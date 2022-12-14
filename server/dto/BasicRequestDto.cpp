@@ -19,3 +19,7 @@ string BasicRequestDto::getString(const string& key) {
 int BasicRequestDto::getInt(const string& key) {
     return jsonParser.getInt(key);
 }
+
+User *BasicRequestDto::getUser() {
+    return jsonParser.getUser("user");
+}
