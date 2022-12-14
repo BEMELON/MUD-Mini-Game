@@ -82,15 +82,7 @@ TEST(USER_SERVICE, UPDATE_COORDINATE) {
     const char *json = R"(
     {
         "Request URL" : "/user/test1/move",
-        "user" : {
-            "id" : "test1",
-            "hp" : "30",
-            "str" : "3",
-            "x" : "4",
-            "y" : "28",
-            "hp-potion" : "1",
-            "str-potion" : "1"
-        }
+        "direction" : "UP"
     })";
 
     send(fd, json, strlen(json), 0);
