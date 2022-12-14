@@ -11,7 +11,7 @@ User::User(string id) {
     this->str = 3;
     this->addPotion(new HpPotion());
     this->addPotion(new StrPotion());
-    this->setPos(RandomGridGenerator().getRandom(), RandomGridGenerator().getRandom());
+    this->setPos(RandomGridGenerator::getRandom(), RandomGridGenerator::getRandom());
 }
 
 int User::getHp() const {

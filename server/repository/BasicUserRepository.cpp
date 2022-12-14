@@ -54,7 +54,6 @@ User *BasicUserRepository::delUser(User *user) {
         logger->logInfoMsg("[delUser] User " + user->getId() + " does not exist.");
     } else {
         const char* userId = user->getId().c_str();
-        // TODO: Delete Coordinate
         redisCommand(this->dataRepository->redis,"DEL USER:%s", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:hp", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:str", userId);
@@ -137,7 +136,7 @@ User *BasicUserRepository::findById(std::string userId) {
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s:x", userId.c_str()));
     if (reply->str == nullptr) {
-      x = RandomGridGenerator().getRandom();
+      x = RandomGridGenerator::getRandom();
     } else {
         x = std::stoi(reply->str);
     }
@@ -146,7 +145,7 @@ User *BasicUserRepository::findById(std::string userId) {
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s:y", userId.c_str()));
     if (reply->str == nullptr) {
-        y = RandomGridGenerator().getRandom();
+        y = RandomGridGenerator::getRandom();
     } else {
         y = std::stoi(reply->str);
     }
