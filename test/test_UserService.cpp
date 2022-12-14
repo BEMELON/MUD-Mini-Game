@@ -73,3 +73,34 @@ TEST(USER_SERVICE, POST_LOGIN_2) {
 
     closeConn(fd);
 }
+
+TEST(USER_SERVICE, UPDATE_COORDINATE) {
+    int fd = getConn();
+    char buffer[256];
+    memset(buffer, 0, 256);
+
+    const char *json = R"(
+    {
+        "Request URL" : "/user/test1/move",
+        "user" : {
+            "id" : "test1",
+            "hp" : "30",
+            "str" : "3",
+            "x" : "4",
+            "y" : "28",
+            "hp-potion" : "1",
+            "str-potion" : "1"
+        }
+    })";
+
+    send(fd, json, strlen(json), 0);
+
+    recv(fd, buffer, 256, 0);
+    cout << buffer << endl;
+    JsonParser jsonParser = JsonParser();
+    jsonParser.parse(buffer);
+    EXPECT_TRUE(jsonParser.has("status"));
+    EXPECT_STREQ(jsonParser.getString("status").c_str(), "success");
+
+    closeConn(fd);
+}
