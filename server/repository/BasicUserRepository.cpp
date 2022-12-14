@@ -4,13 +4,22 @@
 
 #include "../header/BasicUserRepository.h"
 #include <algorithm>
-#include <iostream>
+#include <random>
 
 BasicUserRepository::BasicUserRepository() {
 }
 
 
 User* BasicUserRepository::createUser(User *user) {
+    // 시드값을 얻기 위한 random_device 생성.
+    std::random_device rd;
+
+    // random_device 를 통해 난수 생성 엔진을 초기화 한다.
+    std::mt19937 gen(rd());
+
+    // 0 부터 99 까지 균등하게 나타나는 난수열을 생성하기 위해 균등 분포 정의.
+    std::uniform_int_distribution<int> dis(1, 30);
+
     redisReply* reply;
     const char* userId = user->getId().c_str();
 
@@ -30,8 +39,12 @@ User* BasicUserRepository::createUser(User *user) {
     redisCommand(this->dataRepository->redis,"SET USER:%s:potion:str 1", userId);
 
     // SET random Coordinate
-    // TODO: Add Coordinate
-//    redisCommand(this->dataRepository->redis,"SET USER:%s:potion:hp 1", userId);
+    // TODO: WTF? bug
+    string prefix_x = "SET USER:" + user->getId() + ":x %s";
+    redisCommand(this->dataRepository->redis, prefix_x.c_str(), to_string(user->getPos().getX()).c_str());
+
+    string prefix_y = "SET USER:" + user->getId() + ":y %s";
+    redisCommand(this->dataRepository->redis, prefix_y.c_str(), to_string(user->getPos().getY()).c_str());
 
 
     logger->logInfoMsg("[CREATE_USER] User " + user->getId() + " has been created!");
@@ -54,6 +67,8 @@ User *BasicUserRepository::delUser(User *user) {
         redisCommand(this->dataRepository->redis,"DEL USER:%s", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:hp", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:str", userId);
+        redisCommand(this->dataRepository->redis,"DEL USER:%s:x", userId);
+        redisCommand(this->dataRepository->redis,"DEL USER:%s:y", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:potion:hp", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:potion:str", userId);
         logger->logInfoMsg("[DELETE_USER] User " + user->getId() + " deleted!");
@@ -126,6 +141,36 @@ User *BasicUserRepository::findById(std::string userId) {
         user->setStrPotion(potionCount);
     }
 
+    // 시드값을 얻기 위한 random_device 생성.
+    std::random_device rd;
+
+    // random_device 를 통해 난수 생성 엔진을 초기화 한다.
+    std::mt19937 gen(rd());
+
+    // 0 부터 99 까지 균등하게 나타나는 난수열을 생성하기 위해 균등 분포 정의.
+    std::uniform_int_distribution<int> dis(1, 30);
+
+
+    // set user-x
+    int x, y;
+    reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
+                                                   "GET USER:%s:x", userId.c_str()));
+    if (reply->str == nullptr) {
+      x = dis(gen);
+    } else {
+        x = std::stoi(reply->str);
+    }
+
+    // set user-y
+    reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
+                                                   "GET USER:%s:y", userId.c_str()));
+    if (reply->str == nullptr) {
+        y = dis(gen);
+    } else {
+        y = std::stoi(reply->str);
+    }
+    user->setPos(x, y);
+
     return user;
 }
 
@@ -158,6 +203,13 @@ User *BasicUserRepository::updateUser(std::string userId, User *updatedUser) {
                  "SET USER:%s:potion:hp %s", user->getId().c_str(), std::to_string(hpPotions.size()).c_str());
     redisCommand(this->dataRepository->redis,
                  "SET USER:%s:potion:str %s", user->getId().c_str(), std::to_string(hpPotions.size()).c_str());
+
+    int x = updatedUser->getPos().getX();
+    int y = updatedUser->getPos().getY();
+    redisCommand(this->dataRepository->redis,
+                 "SET USER:%s:x %s", user->getId().c_str(), std::to_string(x).c_str());
+    redisCommand(this->dataRepository->redis,
+                 "SET USER:%s:y %s", user->getId().c_str(), std::to_string(y).c_str());
 
     this->logger->logInfoMsg("[UpdateUser] User " + user->getId() + " has been updated! ");
 
