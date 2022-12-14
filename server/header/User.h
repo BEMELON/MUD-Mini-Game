@@ -8,11 +8,15 @@
 
 #include "Coordinate.h"
 #include "../interface/IPotion.h"
+#include "HpPotion.h"
+#include "StrPotion.h"
 #include <list>
 #include <string>
 using namespace std;
-
 class IPotion;
+class StrPotion;
+class HpPotion;
+
 class User {
 private:
     string id;
@@ -41,8 +45,8 @@ public:
 
     // Potion
     void addPotion(IPotion* potion);
-    list<IPotion *> getPotions();
-
+    list<HpPotion *> getHpPotions();
+    list<StrPotion *> getStrPotions();
 };
 
 

@@ -6,12 +6,16 @@
 #define MUD_SERVER_USERCONTROLLER_H
 
 
-#include "../interface/IController.h"
+#include "../interface/IUserController.h"
 
-class UserController : public IController {
-    void setService(IUserService* iUserService) override;
+class UserController : public IUserController {
+protected:
+    IUserService* userService;
+public:
+    UserController();
     void addRoute(IRequestHandler* handler) override;
     IResponseDTO * get(IRequestDTO* body, IResponseDTO* resp) override;
+    void setUserService(IUserService* iUserService);
     void setLogger(ILogger *iLogger) override;
 
     bool login(IRequestDTO* &body, IResponseDTO* &resp);

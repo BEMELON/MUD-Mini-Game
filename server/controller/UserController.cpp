@@ -5,16 +5,25 @@
 #include "../header/UserController.h"
 #include <regex>
 
+UserController::UserController() {
+}
+
 void UserController::addRoute(IRequestHandler *handler) {
     handler->addRoute("/user", &IController::get, this);
 }
 
 bool UserController::login(IRequestDTO* &body, IResponseDTO* &resp) {
+    cout << "Hello login" << endl;
     if (!body->has("userId"))
         return false;
 
     std::string userId = body->getString("userId");
+    User* user = this->userService->login(userId);
 
+    if (user == nullptr)
+        return false;
+
+    resp->setUser(*user);
     return true;
 }
 
@@ -71,6 +80,6 @@ void UserController::setLogger(ILogger *iLogger) {
     this->logger = iLogger;
 }
 
-void UserController::setService(IUserService* iUserService) {
+void UserController::setUserService(IUserService *iUserService) {
     this->userService = iUserService;
 }

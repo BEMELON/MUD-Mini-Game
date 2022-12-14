@@ -8,6 +8,7 @@
 
 #include "../interface/IPotion.h"
 #include "../header/User.h"
+class User;
 
 class HpPotion: public IPotion {
     void action(User *user) override;

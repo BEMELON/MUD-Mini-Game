@@ -17,6 +17,8 @@ protected:
     IDataRepository *dataRepository;
     ILogger *logger;
 public:
+    virtual void setLogger(ILogger* iLogger) = 0;
+    virtual void setDataRepository(IDataRepository* iDataRepository) = 0;
     virtual User* createUser(User* user) = 0;
     virtual User* updateUser(std::string userId, User* updatedUser) = 0;
     virtual User* delUser(User *user) = 0;

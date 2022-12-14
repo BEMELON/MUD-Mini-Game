@@ -16,9 +16,7 @@ class IRequestHandler;
 interface IController {
 protected:
     ILogger* logger;
-    IUserService* userService;
 public:
-    virtual void setService(IUserService* iUserService) = 0;
     virtual void addRoute(IRequestHandler* handler) = 0;
     virtual IResponseDTO*  get(IRequestDTO* body, IResponseDTO* resp) = 0;
     virtual void setLogger(ILogger* iLogger) = 0;

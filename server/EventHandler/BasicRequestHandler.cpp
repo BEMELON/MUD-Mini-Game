@@ -9,7 +9,6 @@
 #include <iostream>
 #include <hash_map>
 #include "../header/BasicRequestHandler.h"
-#include "../header/JsonParser.h"
 
 void BasicRequestHandler::listen(int port) {
     // Setup for Logging
@@ -42,8 +41,7 @@ void BasicRequestHandler::listen(int port) {
 
     memset(&client_addr, 0, sizeof(struct sockaddr_in));
 
-    this->logger->logInfoMsg("BasicRequestHandler Started!");
-    this->logger->logInfoMsg("Server started at port " + std::to_string(port));
+    this->logger->logInfoMsg("[Init] Server started at port " + std::to_string(port));
 
     while (true) {
         if ((active_fd = accept(passive_fd, (struct sockaddr *)&client_addr, &client_len)) < 0)
@@ -53,7 +51,7 @@ void BasicRequestHandler::listen(int port) {
             this->logger->logSysErrorMsg("Fork Error");
 
         if (pid == 0) {
-            sprintf(msg, "User Connected, [%d] Process fork", getpid());
+            sprintf(msg, "[EventHandler] new User Connected, new process has been created : %d", getpid());
             this->logger->logInfoMsg(msg);
 
             memset(buffer, 0, MAX_BUFFER);

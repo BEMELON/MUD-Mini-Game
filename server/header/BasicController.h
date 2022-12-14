@@ -6,13 +6,14 @@
 #define MUD_SERVER_BASICCONTROLLER_H
 
 
-#include "../interface/IController.h"
+#include "../interface/IUserController.h"
 
-class BasicController: public IController {
+class BasicController: public IUserController {
 public:
     void addRoute(IRequestHandler *handler) override;
     IResponseDTO* get(IRequestDTO* body, IResponseDTO* resp) override;
     void setLogger(ILogger *iLogger) override;
+    void setUserService(IUserService *iUserService) override;
 };
 
 

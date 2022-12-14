@@ -1,4 +1,5 @@
-//
+//    this->dataRepository->connect("127.0.0.1", 6379);
+
 // Created by BEMELON on 22. 12. 5.
 //
 #ifndef MUD_SERVER_IDATAREPOSITORY_H

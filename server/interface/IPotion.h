@@ -5,7 +5,6 @@
 #ifndef MUD_SERVER_IPOTION_H
 #define MUD_SERVER_IPOTION_H
 #define interface class
-#include "../header/User.h"
 class User;
 
 interface IPotion {

@@ -3,6 +3,8 @@
 //
 
 #include "../header/User.h"
+#include "../header/HpPotion.h"
+#include "../header/StrPotion.h"
 
 User::User(string id) {
     this->id = id;
@@ -48,6 +50,22 @@ void User::addPotion(IPotion* potion) {
     this->potions.push_back(potion);
 }
 
-list<IPotion *> User::getPotions() {
-    return this->potions;
+list<HpPotion *> User::getHpPotions() {
+    list<HpPotion *> hpPotions;
+    for(IPotion* potion: this->potions) {
+        auto* hpPotion = dynamic_cast<HpPotion *>(potion);
+        if (hpPotion != nullptr)
+            hpPotions.push_back(hpPotion);
+    }
+    return hpPotions;
+}
+
+list<StrPotion *> User::getStrPotions() {
+    list<StrPotion *> strPotions;
+    for(IPotion* potion: this->potions) {
+        auto* strPotion = dynamic_cast<StrPotion *>(potion);
+        if (strPotion != nullptr)
+            strPotions.push_back(strPotion);
+    }
+    return strPotions;
 }

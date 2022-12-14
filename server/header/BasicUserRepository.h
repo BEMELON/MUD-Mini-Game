@@ -1,4 +1,4 @@
-//
+//IDataRepository* redisRepository, ILogger *iLogger
 // Created by BEMELON on 22. 12. 8.
 //
 
@@ -11,12 +11,14 @@
 
 class BasicUserRepository: public IUserRepository {
 public:
-    BasicUserRepository(IDataRepository* redisRepository, ILogger *iLogger);
+    BasicUserRepository();
     User* createUser(User *user) override;
     User* delUser(User *user) override;
     list<User *> findAll() override;
     User* findById(std::string userId) override;
     User* updateUser(std::string userId, User *updatedUser) override;
+    void setLogger(ILogger *iLogger) override;
+    void setDataRepository(IDataRepository *iDataRepository) override;
 };
 
 

@@ -4,19 +4,24 @@
 
 #include "../header/BasicResponseDto.h"
 #define RAPIDJSON_HAS_STDSTRING 1
-#include "../header/JsonBuilder.h"
 
 BasicResponseDto::BasicResponseDto() {}
 
 std::string BasicResponseDto::getJsonMsg() {
-    return this->json_msg;
+    return jsonBuilder.build();
 }
 
 IResponseDTO *BasicResponseDto::setStatus(const char *status) {
     this->msg = status;
-
-    JsonBuilder responseBuilder = JsonBuilder();
-    this->json_msg = responseBuilder.add("status", status).build();
-
+    jsonBuilder.add("status", status);
     return this;
 }
+
+void BasicResponseDto::addUsers(list<User> users) {
+    jsonBuilder.addUsers(users);
+}
+
+void BasicResponseDto::setUser(User user) {
+    jsonBuilder.setUser(user);
+}
+

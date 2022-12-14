@@ -14,7 +14,7 @@ bool RedisRepository::connect(const char *addr, int port) {
         this->logger->logSysErrorMsg(this->redis->errstr);
         return false;
     }
-    this->logger->logInfoMsg("Redis connected with port " + std::to_string(port));
+    this->logger->logInfoMsg("[Init] Redis connected with port " + std::to_string(port));
     return true;
 }
 

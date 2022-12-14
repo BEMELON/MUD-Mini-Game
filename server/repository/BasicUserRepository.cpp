@@ -3,14 +3,10 @@
 //
 
 #include "../header/BasicUserRepository.h"
-#include "../header/HpPotion.h"
-#include "../header/StrPotion.h"
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
-BasicUserRepository::BasicUserRepository(IDataRepository* dataRepository, ILogger *logger) {
-    this->dataRepository = dataRepository;
-    this->logger = logger;
+BasicUserRepository::BasicUserRepository() {
 }
 
 
@@ -88,12 +84,10 @@ User *BasicUserRepository::findById(std::string userId) {
 
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s", userId.c_str()));
-
     if (reply && reply->str == nullptr) {
         this->logger->logInfoMsg("[findUser] No user found by id : " + userId);
         return nullptr;
     }
-
     User* user = new User(userId);
 
     // set HP
@@ -160,27 +154,24 @@ User *BasicUserRepository::updateUser(std::string userId, User *updatedUser) {
 
 
     // update HP potion
-    const list<IPotion *> &potions = updatedUser->getPotions();
-    int cntHpPotion = 0;
-    int cntStrPotion = 0;
-    for(auto potion: potions) {
-        HpPotion* hpPotion = dynamic_cast<HpPotion *>(potion);
-
-        if (hpPotion == nullptr) {
-            cntStrPotion++;
-        } else {
-            cntHpPotion++;
-        }
-    }
+    const list<HpPotion *> &hpPotions = updatedUser->getHpPotions();
 
     redisCommand(this->dataRepository->redis,
-                 "SET USER:%s:potion:hp %s", user->getId().c_str(), std::to_string(cntHpPotion).c_str());
+                 "SET USER:%s:potion:hp %s", user->getId().c_str(), std::to_string(hpPotions.size()).c_str());
     redisCommand(this->dataRepository->redis,
-                 "SET USER:%s:potion:str %s", user->getId().c_str(), std::to_string(cntHpPotion).c_str());
+                 "SET USER:%s:potion:str %s", user->getId().c_str(), std::to_string(hpPotions.size()).c_str());
 
     this->logger->logInfoMsg("[UpdateUser] User " + user->getId() + " has been updated! ");
 
     return updatedUser;
+}
+
+void BasicUserRepository::setLogger(ILogger *iLogger) {
+    this->logger = iLogger;
+}
+
+void BasicUserRepository::setDataRepository(IDataRepository *iDataRepository) {
+    this->dataRepository = iDataRepository;
 }
 
 

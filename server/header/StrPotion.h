@@ -11,7 +11,7 @@
 class User;
 
 class StrPotion: public IPotion {
-    void action(User *user) override;
+    void action(User* user) override;
 };
 
 
