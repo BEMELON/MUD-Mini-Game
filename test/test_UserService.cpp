@@ -52,27 +52,6 @@ TEST(USER_SERVICE, POST_LOGIN) {
     closeConn(fd);
 }
 
-TEST(USER_SERVICE, POST_LOGIN_2) {
-    int fd = getConn();
-    char buffer[256];
-    memset(buffer, 0, 256);
-
-    JsonBuilder jsonBuilder = JsonBuilder();
-    jsonBuilder.add("Request URL", "/user/login");
-    jsonBuilder.add("userId", "invalidUser");
-    std::string json = jsonBuilder.build();
-    send(fd, json.c_str(), json.length(), 0);
-
-
-    recv(fd, buffer, 256, 0);
-    cout << buffer << endl;
-    JsonParser jsonParser = JsonParser();
-    jsonParser.parse(buffer);
-    EXPECT_TRUE(jsonParser.has("status"));
-    EXPECT_STREQ(jsonParser.getString("status").c_str(), "success");
-
-    closeConn(fd);
-}
 
 TEST(USER_SERVICE, UPDATE_COORDINATE) {
     int fd = getConn();
@@ -82,7 +61,7 @@ TEST(USER_SERVICE, UPDATE_COORDINATE) {
     const char *json = R"(
     {
         "Request URL" : "/user/test1/move",
-        "direction" : "UP"
+        "direction" : "LEFT"
     })";
 
     send(fd, json, strlen(json), 0);
