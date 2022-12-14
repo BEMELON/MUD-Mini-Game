@@ -10,10 +10,11 @@ UserController::UserController() {
 
 void UserController::addRoute(IRequestHandler *handler) {
     handler->addRoute("/user", &IController::get, this);
+    this->logger->logInfoMsg("[Init] UserController Route initialized");
 }
 
 bool UserController::login(IRequestDTO* &body, IResponseDTO* &resp) {
-    cout << "Hello login" << endl;
+    this->logger->logInfoMsg("[DEBUG][UserController][login] called");
     if (!body->has("userId"))
         return false;
 
@@ -28,17 +29,17 @@ bool UserController::login(IRequestDTO* &body, IResponseDTO* &resp) {
 }
 
 bool UserController::getAllUser(IRequestDTO* &body, IResponseDTO* &resp) {
-    cout << "Hello getAllUser" << endl;
+    this->logger->logInfoMsg("[DEBUG][UserController][getAllUser] called");
     return true;
 }
 
 bool UserController::getUserInfo(IRequestDTO* &body, IResponseDTO* &resp) {
-    cout << "Hello getUserInfo" << endl;
+    this->logger->logInfoMsg("[DEBUG][UserController][getUserInfo] called");
     return true;
 }
 
 bool UserController::moveUser(IRequestDTO* &body, IResponseDTO* &resp) {
-    cout << "Hello moveUser" << endl;
+    this->logger->logInfoMsg("[DEBUG][UserController][moveUser] called");
     if (!body->has("user"))
         return false;
 
@@ -74,7 +75,7 @@ IResponseDTO *UserController::get(IRequestDTO *body, IResponseDTO *resp) {
     } else if (std::regex_match(path, std::regex("/user/[^/]+"))) {
         status = getUserInfo(body, resp);
     } else {
-        this->logger->logInfoMsg("Not handled by UserController ");
+        this->logger->logInfoMsg("[DEBUG] Not handled by UserController ");
         status = false;
     }
     if (status)
