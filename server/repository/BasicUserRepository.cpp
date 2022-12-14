@@ -110,22 +110,20 @@ User *BasicUserRepository::findById(std::string userId) {
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s:potion:hp", userId.c_str()));
     if (reply->str == nullptr)
-        user->addPotion(new HpPotion());
+        user->setHpPotion(1);
     else {
         potionCount = std::stoi(reply->str);
-        for(int i = 0; i < potionCount; i++)
-            user->addPotion(new StrPotion());
+        user->setHpPotion(potionCount);
     }
 
     // set str-potion
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s:potion:str", userId.c_str()));
     if (reply->str == nullptr)
-        user->addPotion(new StrPotion());
+        user->setStrPotion(1);
     else {
         potionCount = std::stoi(reply->str);
-        for(int i = 0; i < potionCount; i++)
-            user->addPotion(new StrPotion());
+        user->setStrPotion(potionCount);
     }
 
     return user;

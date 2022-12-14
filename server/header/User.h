@@ -25,6 +25,7 @@ private:
     int str;
     list<IPotion *> potions;
 
+    void addPotion(IPotion* potion);
 public:
     // ID
     User(string id);
@@ -44,7 +45,8 @@ public:
     Coordinate getPos();
 
     // Potion
-    void addPotion(IPotion* potion);
+    void setHpPotion(int cnt);
+    void setStrPotion(int cnt);
     list<HpPotion *> getHpPotions();
     list<StrPotion *> getStrPotions();
 };

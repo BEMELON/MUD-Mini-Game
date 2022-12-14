@@ -3,13 +3,13 @@
 //
 
 #include "../header/User.h"
-#include "../header/HpPotion.h"
-#include "../header/StrPotion.h"
 
 User::User(string id) {
     this->id = id;
     this->hp = 30;
     this->str = 3;
+    this->addPotion(new HpPotion());
+    this->addPotion(new StrPotion());
 }
 
 int User::getHp() const {
@@ -68,4 +68,20 @@ list<StrPotion *> User::getStrPotions() {
             strPotions.push_back(strPotion);
     }
     return strPotions;
+}
+
+void User::setHpPotion(int cnt) {
+    int diff = cnt - getHpPotions().size();
+    while (diff > 0) {
+        this->addPotion(new HpPotion());
+        diff -= 1;
+    }
+}
+
+void User::setStrPotion(int cnt) {
+    int diff = cnt - getStrPotions().size();
+    while (diff > 0) {
+        this->addPotion(new StrPotion());
+        diff -= 1;
+    }
 }
