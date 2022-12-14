@@ -3,23 +3,14 @@
 //
 
 #include "../header/BasicUserRepository.h"
+#include "../header/RandomGridGenerator.h"
 #include <algorithm>
-#include <random>
 
 BasicUserRepository::BasicUserRepository() {
 }
 
 
 User* BasicUserRepository::createUser(User *user) {
-    // 시드값을 얻기 위한 random_device 생성.
-    std::random_device rd;
-
-    // random_device 를 통해 난수 생성 엔진을 초기화 한다.
-    std::mt19937 gen(rd());
-
-    // 0 부터 99 까지 균등하게 나타나는 난수열을 생성하기 위해 균등 분포 정의.
-    std::uniform_int_distribution<int> dis(1, 30);
-
     redisReply* reply;
     const char* userId = user->getId().c_str();
 
@@ -141,22 +132,12 @@ User *BasicUserRepository::findById(std::string userId) {
         user->setStrPotion(potionCount);
     }
 
-    // 시드값을 얻기 위한 random_device 생성.
-    std::random_device rd;
-
-    // random_device 를 통해 난수 생성 엔진을 초기화 한다.
-    std::mt19937 gen(rd());
-
-    // 0 부터 99 까지 균등하게 나타나는 난수열을 생성하기 위해 균등 분포 정의.
-    std::uniform_int_distribution<int> dis(1, 30);
-
-
     // set user-x
     int x, y;
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s:x", userId.c_str()));
     if (reply->str == nullptr) {
-      x = dis(gen);
+      x = RandomGridGenerator().getRandom();
     } else {
         x = std::stoi(reply->str);
     }
@@ -165,7 +146,7 @@ User *BasicUserRepository::findById(std::string userId) {
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s:y", userId.c_str()));
     if (reply->str == nullptr) {
-        y = dis(gen);
+        y = RandomGridGenerator().getRandom();
     } else {
         y = std::stoi(reply->str);
     }
