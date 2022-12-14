@@ -50,10 +50,20 @@ void User::setStr(int str) {
 }
 
 void User::setPos(Coordinate pos) {
+    if (pos.getX() <= 0) pos.setX(1);
+    else if (pos.getY() <= 0) pos.setY(1);
+    else if (pos.getX() > 30) pos.setX(30);
+    else if (pos.getY() > 30) pos.setY(30);
+
     this->pos = pos;
 }
 
 void User::setPos(int x, int y) {
+    if (x <= 0) x = 1;
+    else if (y <= 0) y = 1;
+    else if (x > 30) x = 30;
+    else if (y > 30) y = 30;
+
     this->pos = Coordinate(x, y);
 }
 
