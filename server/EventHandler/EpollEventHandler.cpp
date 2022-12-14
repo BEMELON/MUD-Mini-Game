@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include <netinet/tcp.h>
 
 using namespace std;
 void EpollEventHandler::listen(int port) {
@@ -24,6 +25,11 @@ void EpollEventHandler::listen(int port) {
     // reuse-address
     if ((flags = setsockopt(passive, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option))) < 0)
         this->logger->logSysErrorMsg("setsockopt");
+
+    // Nagle Algorithm off
+    int nValue = 1;
+    if (setsockopt(passive, IPPROTO_TCP, TCP_NODELAY, &nValue, sizeof(nValue)) < 0)
+        this->logger->logSysErrorMsg("setsockopt(TCP_NODELAY)");
 
     // set server fd as NON_BLOCK
     flags = fcntl(passive, F_GETFL);
@@ -132,6 +138,7 @@ void EpollEventHandler::listen(int port) {
                     IController *controller = this->controller.find(root)->second;
 
                     this->requestDto->setBody(buffer);
+                    this->responseDto->clean();
                     IResponseDTO* res = (controller->*fn)(this->requestDto, this->responseDto);
 
                     if (send(active, res->getJsonMsg().c_str(), res->getJsonMsg().size(), 0) < 0)
