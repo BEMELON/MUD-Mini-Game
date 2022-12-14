@@ -15,14 +15,14 @@ private:
     bool parseError = false;
 public:
     JsonParser();
-    void parse(string raw);
+    void parse(const string& raw);
 
-    bool has(string key);
+    bool has(const string& key);
 
-    string getString(string key);
-    int getInt(string key);
+    string getString(const string& key);
+    int getInt(const string& key);
 
-    bool hasError();
+    bool hasError() const;
 
     rapidjson::Document* getDocument();
 };

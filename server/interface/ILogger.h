@@ -12,7 +12,8 @@ public:
     virtual void logHeader() = 0;
 
     virtual void logInfoMsg(std::string msg) = 0;
-//    virtual void logWarningMsg(std::string msg) = 0;
+    virtual void logErrorMsg(const char *msg) = 0;
+    virtual void logWarningMsg(const char *msg) = 0;
     virtual void logSysErrorMsg(const char *msg) = 0;
 };
 

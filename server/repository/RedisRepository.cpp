@@ -9,12 +9,12 @@ RedisRepository::RedisRepository() {
 }
 
 bool RedisRepository::connect(const char *addr, int port) {
-    this->conn = redisConnect(addr, port);
-    if (this->conn == nullptr|| this->conn->err) {
-        this->logger->logSysErrorMsg(this->conn->errstr);
+    this->redis = redisConnect(addr, port);
+    if (this->redis == nullptr|| this->redis->err) {
+        this->logger->logSysErrorMsg(this->redis->errstr);
         return false;
     }
-    this->logger->logInfoMsg("Redis connected with port " + std::to_string(port));
+    this->logger->logInfoMsg("[Init] Redis connected with port " + std::to_string(port));
     return true;
 }
 

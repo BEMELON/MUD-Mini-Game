@@ -9,7 +9,6 @@
 #include <iostream>
 #include <hash_map>
 #include "../header/BasicRequestHandler.h"
-#include "../header/JsonParser.h"
 
 void BasicRequestHandler::listen(int port) {
     // Setup for Logging
@@ -42,8 +41,7 @@ void BasicRequestHandler::listen(int port) {
 
     memset(&client_addr, 0, sizeof(struct sockaddr_in));
 
-    this->logger->logInfoMsg("BasicRequestHandler Started!");
-    this->logger->logInfoMsg("Server started at port " + std::to_string(port));
+    this->logger->logInfoMsg("[Init] Server started at port " + std::to_string(port));
 
     while (true) {
         if ((active_fd = accept(passive_fd, (struct sockaddr *)&client_addr, &client_len)) < 0)
@@ -53,20 +51,21 @@ void BasicRequestHandler::listen(int port) {
             this->logger->logSysErrorMsg("Fork Error");
 
         if (pid == 0) {
-            sprintf(msg, "User Connected, [%d] Process fork", getpid());
+            sprintf(msg, "[EventHandler] new User Connected, new process has been created : %d", getpid());
             this->logger->logInfoMsg(msg);
 
-            if (read(active_fd, buffer, MAX_BUFFER) < 0)
+            memset(buffer, 0, MAX_BUFFER);
+            if (recv(active_fd, buffer, MAX_BUFFER, 0) < 0)
                 this->logger->logSysErrorMsg("Read failed");
 
             jsonParser.parse(buffer);
-            if (jsonParser.hasError())
-                this->logger->logSysErrorMsg("JSON Parsing Error");
 
-            auto fn = this->router.find("/")->second;
-            IController *controller = this->controller.find("/")->second;
+            string url = jsonParser.getString("Request URL"); // /user/create
+            string root = getRoot(url);
+            auto fn = this->router.find(root)->second;
+            IController *controller = this->controller.find(root)->second;
 
-            this->requestDto->setDocument(jsonParser.getDocument());
+            this->requestDto->setBody(buffer);
             IResponseDTO* res = (controller->*fn)(this->requestDto, this->responseDto);
 
             if (send(active_fd, res->getJsonMsg().c_str(), res->getJsonMsg().size(), 0) < 0)
@@ -74,6 +73,16 @@ void BasicRequestHandler::listen(int port) {
             exit(EXIT_SUCCESS);
         }
     }
+}
+
+string BasicRequestHandler::getRoot(string path) {
+    int first_slash = path.find('/', 0);
+    int second_slash = path.find('/', first_slash + 1);
+
+    if (second_slash == string::npos)
+        return path.substr(first_slash);
+    else
+        return path.substr(first_slash, second_slash - first_slash);
 }
 
 void BasicRequestHandler::addRoute(std::string path, IResponseDTO* (IController::*fn_router)(IRequestDTO*, IResponseDTO*), IController *caller) {

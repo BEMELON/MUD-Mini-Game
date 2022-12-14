@@ -7,41 +7,46 @@
 
 
 #include "Coordinate.h"
-#include "Potion_hp.h"
-#include "Potion_str.h"
+#include "../interface/IPotion.h"
+#include "HpPotion.h"
+#include "StrPotion.h"
 #include <list>
 #include <string>
-
 using namespace std;
+class IPotion;
+class StrPotion;
+class HpPotion;
+
 class User {
 private:
     string id;
     Coordinate pos;
     int hp;
     int str;
-    list<Potion_hp> hp_potions;
-    list<Potion_str> str_potions;
+    list<IPotion *> potions;
 
 public:
+    // ID
     User(string id);
+    string getId();
 
+    // HP
     void setHp(int hp);
+    int getHp() const;
+
+    // STR
     void setStr(int str);
+    int getStr() const;
+
+    // Coordinate
     void setPos(Coordinate pos);
     void setPos(int x, int y);
-
-    void addHp(int diff);
-    void addstr(int diff);
-    void move(int vec_x, int vec_y);
-    void addHpPotion(Potion_hp potion);
-    void addStrPotion(Potion_str potion);
-
-    string getId();
     Coordinate getPos();
-    int getHp();
-    int getStr();
 
-    
+    // Potion
+    void addPotion(IPotion* potion);
+    list<HpPotion *> getHpPotions();
+    list<StrPotion *> getStrPotions();
 };
 
 

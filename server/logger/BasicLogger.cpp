@@ -41,3 +41,12 @@ void BasicLogger::logSysErrorMsg(const char *msg) {
     std::perror(msg);
     ::exit(EXIT_FAILURE);
 }
+
+void BasicLogger::logErrorMsg(const char *msg) {
+    cout << "[SERVER][ERROR]" << msg << endl;
+    ::exit(EXIT_FAILURE);
+}
+
+void BasicLogger::logWarningMsg(const char *msg) {
+    cout << "[SERVER] " << msg << endl;
+}

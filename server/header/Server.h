@@ -10,24 +10,31 @@
 #include "../interface/ILogger.h"
 #include "../interface/IRequestHandler.h"
 #include "BasicRequestHandler.h"
-#include "../interface/IRepository.h"
+#include "../interface/IDataRepository.h"
+#include "../interface/IUserController.h"
 
 class Server {
 private:
-    ILogger *logger;
-    IRequestHandler *requestHandler;
-    int server_port;
-    std::string redis_addr;
-    int redis_port;
+    ILogger*            logger;
+    IRequestHandler*    requestHandler;
+    IDataRepository*    dataRepository;
+    IRequestDTO*        requestDto;
+    IResponseDTO*       responseDto;
+    IUserController*    userController;
+    IUserService*       userService;
+    IUserRepository*    userRepository;
+    int                 server_port;
+    int                 redis_port;
+    std::string         redis_addr;
 
-    void initRequestHandler(IRequestDTO* requestDto, IResponseDTO* responseDto);
-    void initControllers(IController *controllers[]);
-    void initRepository(IRepository *repository);
+    void initDataRepository();
     void initConfig();
+    void initLogger(ILogger *iLogger);
 public:
-    Server(ILogger *logger, IRequestHandler *handler, IController *controllers[],
-           IRequestDTO* requestDto, IResponseDTO* responseDto, IRepository *repository);
-
+    Server(ILogger* iLogger);
+    void setEventHandler(IRequestHandler *handler, IRequestDTO *requestDto, IResponseDTO *responseDto);
+    void setDataRepository(IDataRepository* dataRepository);
+    void setUserStack(IUserController* iUserController, IUserService* iUserService, IUserRepository* iUserRepository);
     void listen();
 };
 

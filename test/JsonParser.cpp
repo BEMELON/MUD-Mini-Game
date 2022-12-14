@@ -2,18 +2,19 @@
 // Created by BEMELON on 22. 12. 5.
 //
 
-#include "../header/JsonParser.h"
 
+
+#include "../server/header/JsonParser.h"
 
 JsonParser::JsonParser() = default;
 
-void JsonParser::parse(const string &raw) {
+void JsonParser::parse(const string& raw) {
     this->d.Parse(raw.c_str());
 
     this->parseError |= d.HasParseError();
 }
 
-bool JsonParser::has(const string &key) {
+bool JsonParser::has(const string& key) {
     return d.HasMember(key.c_str());
 }
 

@@ -6,18 +6,20 @@
 #define MUD_SERVER_JSONBUILDER_H
 #include <iostream>
 #include "rapidjson/document.h"
+#include "User.h"
 
 using namespace std;
 class JsonBuilder {
 private:
     rapidjson::Document d;
-
+    rapidjson::Value buildUser(User &user);
 public:
     JsonBuilder();
 
-    JsonBuilder &add(string key, string value);
-    JsonBuilder &add(string key, int value);
-
+    JsonBuilder &add(const string& key, const string& value);
+    JsonBuilder &add(const string& key, int value);
+    JsonBuilder &setUser(User &user);
+    JsonBuilder &addUsers(list<User> &users);
     string build();
 };
 

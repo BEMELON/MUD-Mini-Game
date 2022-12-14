@@ -15,3 +15,11 @@ IResponseDTO* BasicController::get(IRequestDTO* body, IResponseDTO* resp) {
 
     return resp->setStatus("success");
 }
+
+void BasicController::setLogger(ILogger *iLogger) {
+    this->logger = iLogger;
+}
+
+void BasicController::setUserService(IUserService *iUserService) {
+    this->userService = iUserService;
+}

@@ -8,19 +8,30 @@
 #include "header/BasicRequestDto.h"
 #include "header/BasicResponseDto.h"
 #include "header/RedisRepository.h"
+#include "header/UserController.h"
+#include "header/UserService.h"
+#include "header/BasicUserRepository.h"
+#include "interface/IUserController.h"
 
 using namespace std;
 
 int main() {
-    IController *controllers[1];
-    controllers[0] = new BasicController();
+    ILogger* logger = new BasicLogger();
+    IRequestHandler* requestHandler = new BasicRequestHandler();
+    IRequestDTO* requestDto = new BasicRequestDto();
+    IResponseDTO* responseDto = new BasicResponseDto();
+    IDataRepository* dataRepository = new RedisRepository();
 
-    Server server = Server( new BasicLogger(),
-                            new BasicRequestHandler(),
-                            controllers,
-                            new BasicRequestDto(),
-                            new BasicResponseDto(),
-                            new RedisRepository());
+    // user stack
+    IUserController* userController = new UserController();
+    IUserRepository* userRepository = new BasicUserRepository();
+    IUserService* userService = new UserService();
+
+    Server server = Server(logger);
+    server.setDataRepository(dataRepository);
+    server.setEventHandler(requestHandler, requestDto, responseDto);
+    server.setUserStack(userController, userService, userRepository);
+
     server.listen();
 }
 

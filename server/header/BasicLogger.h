@@ -13,6 +13,8 @@ class BasicLogger: public ILogger {
     void logHeader() override;
     void logInfoMsg(std::string msg) override;
     void logSysErrorMsg(const char *msg) override;
+    void logErrorMsg(const char *msg) override;
+    void logWarningMsg(const char *msg) override;
 };
 
 

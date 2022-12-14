@@ -9,7 +9,13 @@
 #include "../interface/IRequestDTO.h"
 
 class BasicRequestDto: public IRequestDTO {
-
+private:
+    JsonParser jsonParser;
+public:
+    int getInt(const std::string &key) override;
+    bool has(const std::string &key) override;
+    std::string getString(const std::string &key) override;
+    void setBody(const std::string &body) override;
 };
 
 
