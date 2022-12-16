@@ -32,20 +32,9 @@ bool UserService::updateUser(User *user) {
     return true;
 }
 
-bool UserService::moveUser(User* pUser, string direction) {
-    int vec_x = 0;
-    int vec_y = 0;
-    if (direction == "UP") {
-        vec_y = 1;
-    } else if (direction == "DOWN") {
-        vec_y = -1;
-    } else if (direction == "RIGHT") {
-        vec_x = 1;
-    } else if (direction == "LEFT") {
-        vec_x = -1;
-    } else {
+bool UserService::moveUser(User* pUser, int vec_x, int vec_y) {
+    if (vec_x > 3 || vec_x < -3 || vec_y > 3 || vec_y < -3)
         return false;
-    }
 
     Coordinate org_pos = pUser->getPos();
     pUser->setPos(org_pos.getX() + vec_x, org_pos.getY() + vec_y);

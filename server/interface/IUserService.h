@@ -17,7 +17,7 @@ public:
     virtual void setUserRepository(IUserRepository* iUserRepository) = 0;
     virtual User* login(string userId) = 0;
     virtual bool updateUser(User *user) = 0;
-    virtual bool moveUser(User *pUser, string basicString) = 0;
+    virtual bool moveUser(User *pUser, int x, int y) = 0;
     virtual User* findUserById(string userId) = 0;
     virtual bool sendMsg(User* from, User* to, string msg) = 0;
     virtual bool attack(User* user) = 0;

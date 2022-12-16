@@ -48,13 +48,14 @@ bool UserController::getUserInfo(IRequestDTO* &body, IResponseDTO* &resp) {
 
 bool UserController::moveUser(IRequestDTO* &body, IResponseDTO* &resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][moveUser] called");
-    if (!body->has("direction")) return false;
+    if (!body->has("x") || !body->has("y")) return false;
 
     string userId = getUserId(body->getString("Request URL"));
     User* user = this->userService->login(userId);
     if (user == nullptr) return false;
-    string direction = body->getString("direction");
-    bool status = this->userService->moveUser(user, direction);
+    int x = stoi(body->getString("x"));
+    int y = stoi(body->getString("y"));
+    bool status = this->userService->moveUser(user, x, y);
 
     resp->setUser((*this->userService->login(userId)));
     return status;
