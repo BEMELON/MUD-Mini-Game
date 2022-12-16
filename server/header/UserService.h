@@ -19,6 +19,7 @@ public:
     bool moveUser(User *pUser, string direction) override;
     User * findUserById(string userId) override;
     bool sendMsg(User *from, User *to, string msg) override;
+    bool attack(User* user) override;
 };
 
 

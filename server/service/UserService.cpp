@@ -67,3 +67,7 @@ bool UserService::sendMsg(User* from, User* to, string msg) {
 
     return true;
 }
+
+bool UserService::attack(User* user) {
+    return true;
+}

@@ -53,7 +53,16 @@ bool UserController::moveUser(IRequestDTO* &body, IResponseDTO* &resp) {
 
 bool UserController::attack(IRequestDTO *&body, IResponseDTO *&resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][attack] called");
-    return true;
+
+    string userId = getUserId(body->getString("Request URL"));
+    User* user = userService->findUserById(userId);
+    if (user == nullptr)
+        return false;
+
+    bool status = userService->attack(user);
+    user = userService->findUserById(userId);
+    resp->setUser(*user);
+    return status;
 }
 
 bool UserController::sendMsg(IRequestDTO *&body, IResponseDTO *&resp) {
