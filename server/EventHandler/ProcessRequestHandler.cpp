@@ -8,9 +8,9 @@
 #include <csignal>
 #include <iostream>
 #include <hash_map>
-#include "../header/BasicRequestHandler.h"
+#include "../header/ProcessRequestHandler.h"
 
-void BasicRequestHandler::listen(int port) {
+void ProcessRequestHandler::listen(int port) {
     // Setup for Logging
     this->port = port;
 
@@ -75,7 +75,7 @@ void BasicRequestHandler::listen(int port) {
     }
 }
 
-string BasicRequestHandler::getRoot(string path) {
+string ProcessRequestHandler::getRoot(string path) {
     int first_slash = path.find('/', 0);
     int second_slash = path.find('/', first_slash + 1);
 
@@ -85,7 +85,7 @@ string BasicRequestHandler::getRoot(string path) {
         return path.substr(first_slash, second_slash - first_slash);
 }
 
-void BasicRequestHandler::addRoute(std::string path, IResponseDTO* (IController::*fn_router)(IRequestDTO*, IResponseDTO*), IController *caller) {
+void ProcessRequestHandler::addRoute(std::string path, IResponseDTO* (IController::*fn_router)(IRequestDTO*, IResponseDTO*), IController *caller) {
     this->router.insert(std::make_pair(path, fn_router));
     this->controller.insert(std::make_pair(path, caller));
 }

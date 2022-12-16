@@ -5,13 +5,12 @@
 #ifndef MUD_SERVER_STRPOTION_H
 #define MUD_SERVER_STRPOTION_H
 
-
-#include "../interface/IPotion.h"
 #include "../header/User.h"
 class User;
 
-class StrPotion: public IPotion {
-    void action(User* user) override;
+class StrPotion {
+public:
+    static void action(User* user);
 };
 
 

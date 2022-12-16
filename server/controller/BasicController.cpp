@@ -3,7 +3,7 @@
 //
 
 #include "../header/BasicController.h"
-#include "../header/BasicResponseDto.h"
+#include "../header/ResponseDto.h"
 #include <iostream>
 
 void BasicController::addRoute(IRequestHandler *handler) {

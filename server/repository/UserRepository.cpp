@@ -2,15 +2,15 @@
 // Created by BEMELON on 22. 12. 8.
 //
 
-#include "../header/BasicUserRepository.h"
+#include "../header/UserRepository.h"
+#include "../header/RandomGridGenerator.h"
 #include <algorithm>
-#include <iostream>
 
-BasicUserRepository::BasicUserRepository() {
+UserRepository::UserRepository() {
 }
 
 
-User* BasicUserRepository::createUser(User *user) {
+User* UserRepository::createUser(User *user) {
     redisReply* reply;
     const char* userId = user->getId().c_str();
 
@@ -30,15 +30,25 @@ User* BasicUserRepository::createUser(User *user) {
     redisCommand(this->dataRepository->redis,"SET USER:%s:potion:str 1", userId);
 
     // SET random Coordinate
-    // TODO: Add Coordinate
-//    redisCommand(this->dataRepository->redis,"SET USER:%s:potion:hp 1", userId);
+    // TODO: WTF? bug
+    string prefix_x = "SET USER:" + user->getId() + ":x %s";
+    redisCommand(this->dataRepository->redis, prefix_x.c_str(), to_string(user->getPos().getX()).c_str());
 
+    string prefix_y = "SET USER:" + user->getId() + ":y %s";
+    redisCommand(this->dataRepository->redis, prefix_y.c_str(), to_string(user->getPos().getY()).c_str());
+
+    // SET Welcome Message
+    list<string> initMsgs;
+    initMsgs.emplace_back("Welcome!");
+    string prefix = "LPUSH USER:" + user->getId() + ":messages Welcome!";
+    redisCommand(this->dataRepository->redis, prefix.c_str());
+    user->setMessages(initMsgs);
 
     logger->logInfoMsg("[CREATE_USER] User " + user->getId() + " has been created!");
     return user;
 }
 
-User *BasicUserRepository::delUser(User *user) {
+User *UserRepository::delUser(User *user) {
     redisReply* reply;
 
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
@@ -50,19 +60,22 @@ User *BasicUserRepository::delUser(User *user) {
         logger->logInfoMsg("[delUser] User " + user->getId() + " does not exist.");
     } else {
         const char* userId = user->getId().c_str();
-        // TODO: Delete Coordinate
         redisCommand(this->dataRepository->redis,"DEL USER:%s", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:hp", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:str", userId);
+        redisCommand(this->dataRepository->redis,"DEL USER:%s:x", userId);
+        redisCommand(this->dataRepository->redis,"DEL USER:%s:y", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:potion:hp", userId);
         redisCommand(this->dataRepository->redis,"DEL USER:%s:potion:str", userId);
+        redisCommand(this->dataRepository->redis,"DEL USER:%s:messages", userId);
+
         logger->logInfoMsg("[DELETE_USER] User " + user->getId() + " deleted!");
     }
 
     return user;
 }
 
-std::list<User *> BasicUserRepository::findAll() {
+std::list<User *> UserRepository::findAll() {
     redisReply* reply;
     std::string userId;
     list<User *> users;
@@ -78,7 +91,7 @@ std::list<User *> BasicUserRepository::findAll() {
     return users;
 }
 
-User *BasicUserRepository::findById(std::string userId) {
+User *UserRepository::findById(std::string userId) {
     redisReply* reply;
     int potionCount = 0;
 
@@ -88,6 +101,7 @@ User *BasicUserRepository::findById(std::string userId) {
         this->logger->logInfoMsg("[findUser] No user found by id : " + userId);
         return nullptr;
     }
+    freeReplyObject(reply);
     User* user = new User(userId);
 
     // set HP
@@ -97,6 +111,7 @@ User *BasicUserRepository::findById(std::string userId) {
         user->setHp(30);
     else
         user->setHp(std::stoi(reply->str));
+    freeReplyObject(reply);
 
     // set str
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
@@ -105,34 +120,66 @@ User *BasicUserRepository::findById(std::string userId) {
         user->setStr(3);
     else
         user->setStr(std::stoi(reply->str));
+    freeReplyObject(reply);
 
     // set hp-potion
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s:potion:hp", userId.c_str()));
     if (reply->str == nullptr)
-        user->addPotion(new HpPotion());
+        user->setHpPotion(1);
     else {
         potionCount = std::stoi(reply->str);
-        for(int i = 0; i < potionCount; i++)
-            user->addPotion(new StrPotion());
+        user->setHpPotion(potionCount);
     }
+    freeReplyObject(reply);
 
     // set str-potion
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
                                                    "GET USER:%s:potion:str", userId.c_str()));
     if (reply->str == nullptr)
-        user->addPotion(new StrPotion());
+        user->setStrPotion(1);
     else {
         potionCount = std::stoi(reply->str);
-        for(int i = 0; i < potionCount; i++)
-            user->addPotion(new StrPotion());
+        user->setStrPotion(potionCount);
     }
+    freeReplyObject(reply);
+
+    // set user-x
+    int x, y;
+    reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
+                                                   "GET USER:%s:x", userId.c_str()));
+    if (reply->str == nullptr) {
+      x = RandomGridGenerator::getRandom();
+    } else {
+        x = std::stoi(reply->str);
+    }
+    freeReplyObject(reply);
+
+    // set user-y
+    reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
+                                                   "GET USER:%s:y", userId.c_str()));
+    if (reply->str == nullptr) {
+        y = RandomGridGenerator::getRandom();
+    } else {
+        y = std::stoi(reply->str);
+    }
+    user->setPos(x, y);
+    freeReplyObject(reply);
+
+    // set messages
+    string prefix = "LRANGE USER:" + userId + ":messages 0 -1";
+    reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis, prefix.c_str()));
+    for(int i = 0; i < reply->elements; i++) {
+        string msg = reply->element[i]->str;
+        user->addMessage(msg);
+    }
+    freeReplyObject(reply);
 
     return user;
 }
 
 
-User *BasicUserRepository::updateUser(std::string userId, User *updatedUser) {
+User *UserRepository::updateUser(std::string userId, User *updatedUser) {
     redisReply* reply;
     User* user = findById(userId);
 
@@ -145,7 +192,6 @@ User *BasicUserRepository::updateUser(std::string userId, User *updatedUser) {
         redisCommand(this->dataRepository->redis,
                     "SET USER:%s:hp %s", user->getId().c_str(), std::to_string(updatedUser->getHp()).c_str());
 
-    // TODO : update Coordinate
 
     // update STR
     if (user->getStr() != updatedUser->getStr())
@@ -153,24 +199,40 @@ User *BasicUserRepository::updateUser(std::string userId, User *updatedUser) {
                      "SET USER:%s:str %s", user->getId().c_str(), std::to_string(updatedUser->getStr()).c_str());
 
 
-    // update HP potion
-    const list<HpPotion *> &hpPotions = updatedUser->getHpPotions();
+    string hp_prefix = "SET USER:" + user->getId() + ":potion:hp %s";
+    string str_prefix = "SET USER:" + user->getId() + ":potion:str %s";
+    redisCommand(this->dataRepository->redis,
+                 hp_prefix.c_str(), std::to_string(updatedUser->getHpPotions()).c_str());
+    redisCommand(this->dataRepository->redis,
+                 str_prefix.c_str(), std::to_string(updatedUser->getStrPotions()).c_str());
+
+    int x = updatedUser->getPos().getX();
+    int y = updatedUser->getPos().getY();
+    redisCommand(this->dataRepository->redis,
+                 "SET USER:%s:x %s", user->getId().c_str(), std::to_string(x).c_str());
+    redisCommand(this->dataRepository->redis,
+                 "SET USER:%s:y %s", user->getId().c_str(), std::to_string(y).c_str());
+
 
     redisCommand(this->dataRepository->redis,
-                 "SET USER:%s:potion:hp %s", user->getId().c_str(), std::to_string(hpPotions.size()).c_str());
-    redisCommand(this->dataRepository->redis,
-                 "SET USER:%s:potion:str %s", user->getId().c_str(), std::to_string(hpPotions.size()).c_str());
+                 "DEL USER:%s:messages", user->getId().c_str());
+
+    string prefix = "RPUSH USER:" + user->getId() + ":messages %s";
+    for(auto message: updatedUser->getMessages()) {
+        redisCommand(this->dataRepository->redis,
+                     prefix.c_str(), message.c_str());
+    }
 
     this->logger->logInfoMsg("[UpdateUser] User " + user->getId() + " has been updated! ");
 
     return updatedUser;
 }
 
-void BasicUserRepository::setLogger(ILogger *iLogger) {
+void UserRepository::setLogger(ILogger *iLogger) {
     this->logger = iLogger;
 }
 
-void BasicUserRepository::setDataRepository(IDataRepository *iDataRepository) {
+void UserRepository::setDataRepository(IDataRepository *iDataRepository) {
     this->dataRepository = iDataRepository;
 }
 

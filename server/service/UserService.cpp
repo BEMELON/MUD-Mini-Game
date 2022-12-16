@@ -7,6 +7,13 @@
 UserService::UserService() {
 }
 
+void UserService::setLogger(ILogger *iLogger) {
+    this->logger = iLogger;
+}
+
+void UserService::setUserRepository(IUserRepository *iUserRepository) {
+    this->userRepository = iUserRepository;
+}
 
 User* UserService::login(string userId) {
     User *user = this->userRepository->findById(userId);
@@ -15,10 +22,83 @@ User* UserService::login(string userId) {
     return (user);
 }
 
-void UserService::setLogger(ILogger *iLogger) {
-    this->logger = iLogger;
+
+bool UserService::updateUser(User *user) {
+    User* origin_user = this->userRepository->findById(user->getId());
+    if (origin_user == nullptr)
+        return false;
+
+    this->userRepository->updateUser(origin_user->getId(), user);
+    return true;
 }
 
-void UserService::setUserRepository(IUserRepository *iUserRepository) {
-    this->userRepository = iUserRepository;
+bool UserService::moveUser(User* pUser, int vec_x, int vec_y) {
+    if (vec_x > 3 || vec_x < -3 || vec_y > 3 || vec_y < -3)
+        return false;
+
+    Coordinate org_pos = pUser->getPos();
+    pUser->setPos(org_pos.getX() + vec_x, org_pos.getY() + vec_y);
+
+    this->userRepository->updateUser(pUser->getId(), pUser);
+}
+
+User *UserService::findUserById(string userId) {
+    return this->userRepository->findById(userId);
+}
+
+bool UserService::sendMsg(User* from, User* to, string msg) {
+    // TODO : Session update User* from
+    to->addMessage(msg);
+    User* to_updated = this->userRepository->updateUser(to->getId(), to);
+
+    if (to_updated == nullptr)
+        return false;
+
+    return true;
+}
+
+bool UserService::attack(User* user) {
+    return true;
+}
+
+bool UserService::resetSession(User *user) {
+    // TODO: reset User session
+    return true;
+}
+
+list<User *> UserService::findAllUser() {
+    return this->userRepository->findAll();
+}
+
+bool UserService::usePotion(User *user, string type) {
+    if (type == "hp") {
+        int potion_cnt = user->getHpPotions();
+        if (potion_cnt > 0) {
+            user->setHpPotion(potion_cnt - 1);
+            HpPotion::action(user);
+        }
+    } else if (type == "str") {
+        int potion_cnt = user->getStrPotions();
+        if (potion_cnt > 0) {
+            user->setStrPotion(potion_cnt - 1);
+            StrPotion::action(user);
+        }
+    } else {
+        this->logger->logInfoMsg("[DEBUG] [usePotion] not allowed potion " + type);
+        return false;
+    }
+    userRepository->updateUser(user->getId(), user);
+    return true;
+}
+
+User *UserService::findUserById(string userId, bool message) {
+    list<string> empty;
+    list<string> messages;
+    User* user = findUserById(userId);
+    messages = user->getMessages();
+    user->setMessages(empty);
+    userRepository->updateUser(userId, user);
+    user->setMessages(messages);
+
+    return user;
 }

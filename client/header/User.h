@@ -6,9 +6,6 @@
 #define MUD_SERVER_USER_H
 
 
-#include "Coordinate.h"
-#include "HpPotion.h"
-#include "StrPotion.h"
 #include <list>
 #include <string>
 
@@ -19,7 +16,8 @@ class HpPotion;
 class User {
 private:
     string id;
-    Coordinate pos;
+    int x;
+    int y;
     int hp;
     int str;
     int hp_potions;
@@ -40,9 +38,9 @@ public:
     int getStr() const;
 
     // Coordinate
-    void setPos(Coordinate pos);
     void setPos(int x, int y);
-    Coordinate getPos();
+    int getX();
+    int getY();
 
     // Potion
     void setHpPotion(int cnt);

@@ -88,3 +88,10 @@ void Server::setUserStack(IUserController *iUserController, IUserService *iUserS
 
     this->logger->logInfoMsg("[Init] UserRepository initialized.");
 }
+
+void Server::setHealthController(IController *iController) {
+    this->healthController = iController;
+    this->healthController->addRoute(this->requestHandler);
+    this->healthController->setLogger(this->logger);
+    this->logger->logInfoMsg("[Init] HealthController initialized.");
+}

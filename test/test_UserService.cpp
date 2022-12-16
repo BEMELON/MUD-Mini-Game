@@ -52,17 +52,19 @@ TEST(USER_SERVICE, POST_LOGIN) {
     closeConn(fd);
 }
 
-TEST(USER_SERVICE, POST_LOGIN_2) {
+
+TEST(USER_SERVICE, UPDATE_COORDINATE) {
     int fd = getConn();
     char buffer[256];
     memset(buffer, 0, 256);
 
-    JsonBuilder jsonBuilder = JsonBuilder();
-    jsonBuilder.add("Request URL", "/user/login");
-    jsonBuilder.add("userId", "invalidUser");
-    std::string json = jsonBuilder.build();
-    send(fd, json.c_str(), json.length(), 0);
+    const char *json = R"(
+    {
+        "Request URL" : "/user/test1/move",
+        "direction" : "LEFT"
+    })";
 
+    send(fd, json, strlen(json), 0);
 
     recv(fd, buffer, 256, 0);
     cout << buffer << endl;

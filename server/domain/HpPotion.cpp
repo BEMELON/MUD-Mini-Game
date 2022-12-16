@@ -5,5 +5,5 @@
 #include "../header/HpPotion.h"
 
 void HpPotion::action(User *user) {
-//    user->addHp(10);
+    user->setHp(user->getHp() + 10);
 }

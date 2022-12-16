@@ -2,16 +2,16 @@
 // Created by BEMELON on 22. 12. 8.
 //
 
-#ifndef MUD_SERVER_BASICUSERREPOSITORY_H
-#define MUD_SERVER_BASICUSERREPOSITORY_H
+#ifndef MUD_SERVER_USERREPOSITORY_H
+#define MUD_SERVER_USERREPOSITORY_H
 
 
 #include "../interface/IUserRepository.h"
 #include "../interface/IDataRepository.h"
 
-class BasicUserRepository: public IUserRepository {
+class UserRepository: public IUserRepository {
 public:
-    BasicUserRepository();
+    UserRepository();
     User* createUser(User *user) override;
     User* delUser(User *user) override;
     list<User *> findAll() override;
@@ -22,4 +22,4 @@ public:
 };
 
 
-#endif //MUD_SERVER_BASICUSERREPOSITORY_H
+#endif //MUD_SERVER_USERREPOSITORY_H

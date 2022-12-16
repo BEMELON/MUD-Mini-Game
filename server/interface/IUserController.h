@@ -16,5 +16,13 @@ public:
 
     IResponseDTO * get(IRequestDTO *body, IResponseDTO *resp) override = 0;
     void addRoute(IRequestHandler *handler) override = 0;
+    virtual bool login(IRequestDTO* &body, IResponseDTO* &resp) = 0;
+    virtual bool getAllUser(IRequestDTO* &body, IResponseDTO* &resp) = 0;
+    virtual bool getUserInfo(IRequestDTO* &body, IResponseDTO* &resp) = 0;
+    virtual bool moveUser(IRequestDTO* &body, IResponseDTO* &resp) = 0;
+    virtual bool attack(IRequestDTO* &body, IResponseDTO* &resp) = 0;
+    virtual bool sendMsg(IRequestDTO* &body, IResponseDTO* &resp) = 0;
+    virtual bool event(IRequestDTO* &body, IResponseDTO* &resp) = 0;
+    virtual bool usePotion(IRequestDTO* &req, IResponseDTO* &res) = 0;
 };
 #endif //MUD_SERVER_IUSERCONTROLLER_H

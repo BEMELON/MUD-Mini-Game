@@ -15,9 +15,9 @@ class IController;
 // for GNU HashMap
 namespace __gnu_cxx {
     template<>
-    struct hash<std::string > {
-        size_t operator( )(std::string const & s ) const {
-            return __stl_hash_string( s.c_str( ) );
+    struct hash<std::string> {
+        size_t operator( )(std::string const &s) const {
+            return __stl_hash_string(s.c_str());
         }
     };
 }

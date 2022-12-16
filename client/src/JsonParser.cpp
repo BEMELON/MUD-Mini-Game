@@ -45,5 +45,11 @@ User *JsonParser::getUser(const string &key) {
     int y = std::stoi(user_json["y"].GetString());
     user->setPos(x, y);
 
+    list<string> messages;
+    for(const auto& msg: user_json["messages"].GetArray()) {
+        messages.emplace_back(msg.GetString());
+    }
+    user->setMessages(messages);
+
     return user;
 }
