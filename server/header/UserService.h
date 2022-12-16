@@ -17,6 +17,8 @@ public:
     void setUserRepository(IUserRepository *iUserRepository) override;
     bool updateUser(User *user) override;
     bool moveUser(User *pUser, string direction) override;
+    User * findUserById(string userId) override;
+    bool sendMsg(User *from, User *to, string msg) override;
 };
 
 

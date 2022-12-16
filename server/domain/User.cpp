@@ -106,7 +106,7 @@ void User::setMessages(list<string> &messages) {
     this->msgs = messages;
 }
 
-void User::addMessages(string &message) {
+void User::addMessage(string &message) {
     msgs.push_back(message);
 }
 

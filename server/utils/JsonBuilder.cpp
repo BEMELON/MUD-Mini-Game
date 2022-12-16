@@ -86,6 +86,14 @@ rapidjson::Value JsonBuilder::buildUser(User &user) {
     Value key_str_potion("str-potion", d.GetAllocator());
     Value value_str_potion(to_string(user.getStrPotions().size()).c_str(), d.GetAllocator());
 
+    Value key_message("messages", d.GetAllocator());
+    Value arr_message(Type::kArrayType);
+
+    for(auto message: user.getMessages()) {
+        Value msg(message.c_str(), d.GetAllocator());
+        arr_message.PushBack(msg, d.GetAllocator());
+    }
+
     json.AddMember(key_id, value_id, d.GetAllocator());
     json.AddMember(key_hp, value_hp, d.GetAllocator());
     json.AddMember(key_str, value_str, d.GetAllocator());
@@ -93,6 +101,7 @@ rapidjson::Value JsonBuilder::buildUser(User &user) {
     json.AddMember(key_y, value_y, d.GetAllocator());
     json.AddMember(key_hp_potion, value_hp_potion, d.GetAllocator());
     json.AddMember(key_str_potion, value_str_potion, d.GetAllocator());
+    json.AddMember(key_message, arr_message, d.GetAllocator());
 
     return json;
 }

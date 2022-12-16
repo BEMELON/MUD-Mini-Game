@@ -15,10 +15,9 @@ void UserController::addRoute(IRequestHandler *handler) {
 
 bool UserController::login(IRequestDTO* &body, IResponseDTO* &resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][login] called");
-    string userId = getUserId(body->getString("Request URL"));
     if (!body->has("userId"))
         return false;
-
+    string userId = body->getString("userId");
     User* user = this->userService->login(userId);
 
     if (user == nullptr)
@@ -59,9 +58,29 @@ bool UserController::attack(IRequestDTO *&body, IResponseDTO *&resp) {
 
 bool UserController::sendMsg(IRequestDTO *&body, IResponseDTO *&resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][sendMsg] called");
-    return true;
+    if (!body->has("msg_to") || !body->has("msg_content"))
+        return false;
+
+    string from = getUserId(body->getString("Request URL"));
+    string to = body->getString("msg_to");
+    string content = body->getString("msg_content");
+
+    User* user_from = userService->findUserById(from);
+    User* user_to = userService->findUserById(to);
+    if (user_from == nullptr || user_to == nullptr)
+        return false;
+
+    bool status = userService->sendMsg(user_from, user_to, content);
+
+    User* updated_user = userService->findUserById(from);
+    resp->setUser((*updated_user));
+    return status;
 }
 
+bool UserController::event(IRequestDTO *&body, IResponseDTO *&resp) {
+    this->logger->logInfoMsg("[DEBUG][UserController][event] called");
+    return true;
+}
 
 IResponseDTO *UserController::get(IRequestDTO *body, IResponseDTO *resp) {
     std::string path = body->getString("Request URL");
@@ -72,6 +91,8 @@ IResponseDTO *UserController::get(IRequestDTO *body, IResponseDTO *resp) {
         status = login(body, resp);
     } else if (std::regex_match(path, std::regex("/user/[^/]+/move"))) {
         status = moveUser(body, resp);
+    } else if (std::regex_match(path, std::regex("/user/[^/]+/event"))) {
+        status = event(body, resp);
     } else if (std::regex_match(path, std::regex("/user/[^/]+/attack"))) {
         status = attack(body, resp);
     } else if  (std::regex_match(path, std::regex("/user/[^/]+/sendMsg"))) {

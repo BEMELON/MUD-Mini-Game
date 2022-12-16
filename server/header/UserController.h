@@ -26,6 +26,7 @@ public:
     bool moveUser(IRequestDTO* &body, IResponseDTO* &resp);
     bool attack(IRequestDTO* &body, IResponseDTO* &resp);
     bool sendMsg(IRequestDTO* &body, IResponseDTO* &resp);
+    bool event(IRequestDTO* &body, IResponseDTO* &resp);
 };
 
 

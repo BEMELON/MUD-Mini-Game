@@ -54,7 +54,7 @@ public:
     // Messages
     list<string> getMessages();
     void setMessages(list<string> &messages);
-    void addMessages(string &message);
+    void addMessage(string &message);
     string popMessage();
 };
 

@@ -18,5 +18,7 @@ public:
     virtual User* login(string userId) = 0;
     virtual bool updateUser(User *user) = 0;
     virtual bool moveUser(User *pUser, string basicString) = 0;
+    virtual User* findUserById(string userId) = 0;
+    virtual bool sendMsg(User* from, User* to, string msg) = 0;
 };
 #endif //MUD_SERVER_IUSERSERVICE_H

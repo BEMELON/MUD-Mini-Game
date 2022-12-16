@@ -14,7 +14,7 @@ using namespace std;
 void EpollEventHandler::listen(int port) {
     this->port = port;
     int epfd, passive, flags, option;
-    char msg[256];
+    char msg[2048];
     struct sockaddr_in server;
     struct epoll_event events;
 
@@ -74,7 +74,7 @@ void EpollEventHandler::listen(int port) {
     int                        timeout = -1;
 
     this->logger->logInfoMsg("[Init] EpollEventHandler initialized");
-    ::memset(msg, 0, 256);
+    ::memset(msg, 0, 2048);
     ::sprintf(msg, "[DEBUG] Server started with port %d", this->port);
     this->logger->logInfoMsg(msg);
     while (true) {
@@ -114,18 +114,18 @@ void EpollEventHandler::listen(int port) {
 
             } else {
                 // epoll에 등록 된 클라이언트들의 send data 처리
-                char buffer[256];
+                char buffer[2048];
+                int flag;
                 JsonParser jsonParser = JsonParser();
                 int active;
 
                 // set fd
                 active = epoll_events[i].data.fd;
 
-                memset(buffer, 0, 256);
-                if (recv(active, buffer, 256, 0) < 0)
-                    this->logger->logSysErrorMsg("Read failed");
+                memset(buffer, 0, 2048);
+                flag = recv(active, buffer, 2048, 0);;
 
-                if (::strlen(buffer) == 0) {
+                if (::strlen(buffer) == 0 || flag < 0) {
                     this->logger->logInfoMsg("[DEBUG] Client has been terminated");
                     close(active);
                     epoll_ctl(epfd, EPOLL_CTL_DEL, active, NULL);

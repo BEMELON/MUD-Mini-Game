@@ -52,3 +52,18 @@ bool UserService::moveUser(User* pUser, string direction) {
 
     this->userRepository->updateUser(pUser->getId(), pUser);
 }
+
+User *UserService::findUserById(string userId) {
+    return this->userRepository->findById(userId);
+}
+
+bool UserService::sendMsg(User* from, User* to, string msg) {
+    // TODO : Session update User* from
+    to->addMessage(msg);
+    User* to_updated = this->userRepository->updateUser(to->getId(), to);
+
+    if (to_updated == nullptr)
+        return false;
+
+    return true;
+}
