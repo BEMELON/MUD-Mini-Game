@@ -2,12 +2,12 @@
 // Created by BEMELON on 22. 12. 5.
 //
 
-#ifndef MUD_SERVER_BASICREQUESTHANDLER_H
-#define MUD_SERVER_BASICREQUESTHANDLER_H
+#ifndef MUD_SERVER_PROCESSREQUESTHANDLER_H
+#define MUD_SERVER_PROCESSREQUESTHANDLER_H
 #include "../interface/IRequestHandler.h"
 #define MAX_BUFFER 1024
 #define MSG_BUFFER 1536
-class BasicRequestHandler: public IRequestHandler {
+class ProcessRequestHandler: public IRequestHandler {
 private:
 
 public:
@@ -17,4 +17,4 @@ public:
     string getRoot(string path);
 };
 
-#endif //MUD_SERVER_BASICREQUESTHANDLER_H
+#endif //MUD_SERVER_PROCESSREQUESTHANDLER_H

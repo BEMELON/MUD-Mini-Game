@@ -4,12 +4,12 @@
 
 #include "header/Server.h"
 #include "header/BasicLogger.h"
-#include "header/BasicRequestDto.h"
+#include "header/RequestDto.h"
 #include "header/ResponseDto.h"
 #include "header/RedisRepository.h"
 #include "header/UserController.h"
 #include "header/UserService.h"
-#include "header/BasicUserRepository.h"
+#include "header/UserRepository.h"
 #include "interface/IUserController.h"
 #include "header/EpollEventHandler.h"
 #include "header/HealthController.h"
@@ -19,7 +19,7 @@ using namespace std;
 int main() {
     ILogger* logger = new BasicLogger();
     IRequestHandler* requestHandler = new EpollEventHandler();
-    IRequestDTO* requestDto = new BasicRequestDto();
+    IRequestDTO* requestDto = new RequestDto();
     IResponseDTO* responseDto = new ResponseDto();
     IDataRepository* dataRepository = new RedisRepository();
 
@@ -27,7 +27,7 @@ int main() {
 
     // user stack
     IUserController* userController = new UserController();
-    IUserRepository* userRepository = new BasicUserRepository();
+    IUserRepository* userRepository = new UserRepository();
     IUserService* userService = new UserService();
 
     Server server = Server(logger);

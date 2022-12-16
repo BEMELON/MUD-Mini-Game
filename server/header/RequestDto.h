@@ -2,14 +2,14 @@
 // Created by BEMELON on 22. 12. 6.
 //
 
-#ifndef MUD_SERVER_BASICREQUESTDTO_H
-#define MUD_SERVER_BASICREQUESTDTO_H
+#ifndef MUD_SERVER_REQUESTDTO_H
+#define MUD_SERVER_REQUESTDTO_H
 
 
 #include "../interface/IRequestDTO.h"
 #include "User.h"
 
-class BasicRequestDto: public IRequestDTO {
+class RequestDto: public IRequestDTO {
 private:
     JsonParser jsonParser;
 public:
@@ -21,4 +21,4 @@ public:
 };
 
 
-#endif //MUD_SERVER_BASICREQUESTDTO_H
+#endif //MUD_SERVER_REQUESTDTO_H

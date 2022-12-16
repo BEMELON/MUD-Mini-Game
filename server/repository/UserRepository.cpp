@@ -2,15 +2,15 @@
 // Created by BEMELON on 22. 12. 8.
 //
 
-#include "../header/BasicUserRepository.h"
+#include "../header/UserRepository.h"
 #include "../header/RandomGridGenerator.h"
 #include <algorithm>
 
-BasicUserRepository::BasicUserRepository() {
+UserRepository::UserRepository() {
 }
 
 
-User* BasicUserRepository::createUser(User *user) {
+User* UserRepository::createUser(User *user) {
     redisReply* reply;
     const char* userId = user->getId().c_str();
 
@@ -48,7 +48,7 @@ User* BasicUserRepository::createUser(User *user) {
     return user;
 }
 
-User *BasicUserRepository::delUser(User *user) {
+User *UserRepository::delUser(User *user) {
     redisReply* reply;
 
     reply = static_cast<redisReply *>(redisCommand(this->dataRepository->redis,
@@ -75,7 +75,7 @@ User *BasicUserRepository::delUser(User *user) {
     return user;
 }
 
-std::list<User *> BasicUserRepository::findAll() {
+std::list<User *> UserRepository::findAll() {
     redisReply* reply;
     std::string userId;
     list<User *> users;
@@ -91,7 +91,7 @@ std::list<User *> BasicUserRepository::findAll() {
     return users;
 }
 
-User *BasicUserRepository::findById(std::string userId) {
+User *UserRepository::findById(std::string userId) {
     redisReply* reply;
     int potionCount = 0;
 
@@ -179,7 +179,7 @@ User *BasicUserRepository::findById(std::string userId) {
 }
 
 
-User *BasicUserRepository::updateUser(std::string userId, User *updatedUser) {
+User *UserRepository::updateUser(std::string userId, User *updatedUser) {
     redisReply* reply;
     User* user = findById(userId);
 
@@ -229,11 +229,11 @@ User *BasicUserRepository::updateUser(std::string userId, User *updatedUser) {
     return updatedUser;
 }
 
-void BasicUserRepository::setLogger(ILogger *iLogger) {
+void UserRepository::setLogger(ILogger *iLogger) {
     this->logger = iLogger;
 }
 
-void BasicUserRepository::setDataRepository(IDataRepository *iDataRepository) {
+void UserRepository::setDataRepository(IDataRepository *iDataRepository) {
     this->dataRepository = iDataRepository;
 }
 

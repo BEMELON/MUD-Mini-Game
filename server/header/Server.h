@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include "../interface/ILogger.h"
 #include "../interface/IRequestHandler.h"
-#include "BasicRequestHandler.h"
+#include "ProcessRequestHandler.h"
 #include "../interface/IDataRepository.h"
 #include "../interface/IUserController.h"
 
