@@ -88,7 +88,14 @@ bool UserController::sendMsg(IRequestDTO *&body, IResponseDTO *&resp) {
 
 bool UserController::event(IRequestDTO *&body, IResponseDTO *&resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][event] called");
-    return true;
+    string from = getUserId(body->getString("Request URL"));
+    User* user = userService->findUserById(from);
+    if (user == nullptr)
+        return false;
+    bool status = userService->resetSession(user);
+
+    resp->setUser(*user);
+    return status;
 }
 
 IResponseDTO *UserController::get(IRequestDTO *body, IResponseDTO *resp) {

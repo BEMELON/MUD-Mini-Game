@@ -71,3 +71,8 @@ bool UserService::sendMsg(User* from, User* to, string msg) {
 bool UserService::attack(User* user) {
     return true;
 }
+
+bool UserService::resetSession(User *user) {
+    // TODO: reset User session
+    return true;
+}
