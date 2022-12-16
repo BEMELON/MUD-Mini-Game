@@ -43,10 +43,10 @@ JsonBuilder &JsonBuilder::setUser(User &user) {
     return *this;
 }
 
-JsonBuilder &JsonBuilder::addUsers(list<User> &users) {
+JsonBuilder &JsonBuilder::addUsers(list<User *> &users) {
     Value user_array = Value(Type::kArrayType);
-    for(User user: users) {
-        user_array.PushBack(buildUser(user), d.GetAllocator());
+    for(User* user: users) {
+        user_array.PushBack(buildUser(*user), d.GetAllocator());
     }
 
     d.AddMember("users", user_array, d.GetAllocator());

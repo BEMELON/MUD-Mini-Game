@@ -19,7 +19,7 @@ public:
     JsonBuilder &add(const string& key, const string& value);
     JsonBuilder &add(const string& key, int value);
     JsonBuilder &setUser(User &user);
-    JsonBuilder &addUsers(list<User> &users);
+    JsonBuilder &addUsers(list<User *> &users);
     string build();
 
     void clean();

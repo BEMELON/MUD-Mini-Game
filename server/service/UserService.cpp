@@ -76,3 +76,7 @@ bool UserService::resetSession(User *user) {
     // TODO: reset User session
     return true;
 }
+
+list<User *> UserService::findAllUser() {
+    return this->userRepository->findAll();
+}

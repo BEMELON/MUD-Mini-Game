@@ -29,6 +29,9 @@ bool UserController::login(IRequestDTO* &body, IResponseDTO* &resp) {
 
 bool UserController::getAllUser(IRequestDTO* &body, IResponseDTO* &resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][getAllUser] called");
+    list<User *> users = this->userService->findAllUser();
+
+    resp->addUsers(users);
     return true;
 }
 

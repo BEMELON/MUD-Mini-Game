@@ -5,7 +5,7 @@
 #include "header/Server.h"
 #include "header/BasicLogger.h"
 #include "header/BasicRequestDto.h"
-#include "header/BasicResponseDto.h"
+#include "header/ResponseDto.h"
 #include "header/RedisRepository.h"
 #include "header/UserController.h"
 #include "header/UserService.h"
@@ -20,7 +20,7 @@ int main() {
     ILogger* logger = new BasicLogger();
     IRequestHandler* requestHandler = new EpollEventHandler();
     IRequestDTO* requestDto = new BasicRequestDto();
-    IResponseDTO* responseDto = new BasicResponseDto();
+    IResponseDTO* responseDto = new ResponseDto();
     IDataRepository* dataRepository = new RedisRepository();
 
     IController* healthController = new HealthController();

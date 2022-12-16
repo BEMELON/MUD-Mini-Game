@@ -2,30 +2,30 @@
 // Created by BEMELON on 22. 12. 6.
 //
 
-#include "../header/BasicResponseDto.h"
+#include "../header/ResponseDto.h"
 #define RAPIDJSON_HAS_STDSTRING 1
 
-BasicResponseDto::BasicResponseDto() {}
+ResponseDto::ResponseDto() {}
 
-std::string BasicResponseDto::getJsonMsg() {
+std::string ResponseDto::getJsonMsg() {
     return jsonBuilder.build();
 }
 
-IResponseDTO *BasicResponseDto::setStatus(const char *status) {
+IResponseDTO *ResponseDto::setStatus(const char *status) {
     this->msg = status;
     jsonBuilder.add("status", status);
     return this;
 }
 
-void BasicResponseDto::addUsers(list<User> users) {
+void ResponseDto::addUsers(list<User *> users) {
     jsonBuilder.addUsers(users);
 }
 
-void BasicResponseDto::setUser(User user) {
+void ResponseDto::setUser(User user) {
     jsonBuilder.setUser(user);
 }
 
-void BasicResponseDto::clean() {
+void ResponseDto::clean() {
     jsonBuilder.clean();
 }
 
