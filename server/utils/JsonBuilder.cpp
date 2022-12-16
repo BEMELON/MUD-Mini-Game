@@ -81,10 +81,10 @@ rapidjson::Value JsonBuilder::buildUser(User &user) {
     Value value_y(to_string(user.getPos().getY()).c_str(), d.GetAllocator());
 
     Value key_hp_potion("hp-potion", d.GetAllocator());
-    Value value_hp_potion(to_string(user.getHpPotions().size()).c_str(), d.GetAllocator());
+    Value value_hp_potion(to_string(user.getHpPotions()).c_str(), d.GetAllocator());
 
     Value key_str_potion("str-potion", d.GetAllocator());
-    Value value_str_potion(to_string(user.getStrPotions().size()).c_str(), d.GetAllocator());
+    Value value_str_potion(to_string(user.getStrPotions()).c_str(), d.GetAllocator());
 
     Value key_message("messages", d.GetAllocator());
     Value arr_message(Type::kArrayType);

@@ -17,16 +17,17 @@ public:
     UserController();
     void addRoute(IRequestHandler* handler) override;
     IResponseDTO * get(IRequestDTO* body, IResponseDTO* resp) override;
-    void setUserService(IUserService* iUserService);
+    void setUserService(IUserService* iUserService) override;
     void setLogger(ILogger *iLogger) override;
 
-    bool login(IRequestDTO* &body, IResponseDTO* &resp);
-    bool getAllUser(IRequestDTO* &body, IResponseDTO* &resp);
-    bool getUserInfo(IRequestDTO* &body, IResponseDTO* &resp);
-    bool moveUser(IRequestDTO* &body, IResponseDTO* &resp);
-    bool attack(IRequestDTO* &body, IResponseDTO* &resp);
-    bool sendMsg(IRequestDTO* &body, IResponseDTO* &resp);
-    bool event(IRequestDTO* &body, IResponseDTO* &resp);
+    bool login(IRequestDTO* &body, IResponseDTO* &resp) override;
+    bool getAllUser(IRequestDTO* &body, IResponseDTO* &resp) override;
+    bool getUserInfo(IRequestDTO* &body, IResponseDTO* &resp) override;
+    bool moveUser(IRequestDTO* &body, IResponseDTO* &resp) override;
+    bool attack(IRequestDTO* &body, IResponseDTO* &resp) override;
+    bool sendMsg(IRequestDTO* &body, IResponseDTO* &resp) override;
+    bool event(IRequestDTO* &body, IResponseDTO* &resp) override;
+    bool usePotion(IRequestDTO* &req, IResponseDTO* &res) override;
 };
 
 

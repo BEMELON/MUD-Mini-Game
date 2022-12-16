@@ -23,5 +23,6 @@ public:
     virtual bool attack(User* user) = 0;
     virtual bool resetSession(User* user) = 0;
     virtual list<User *> findAllUser() = 0;
+    virtual bool usePotion(User* user, string type) = 0;
 };
 #endif //MUD_SERVER_IUSERSERVICE_H

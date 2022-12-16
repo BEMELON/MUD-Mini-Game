@@ -7,13 +7,12 @@
 
 
 #include "Coordinate.h"
-#include "../interface/IPotion.h"
 #include "HpPotion.h"
 #include "StrPotion.h"
 #include <list>
 #include <string>
+
 using namespace std;
-class IPotion;
 class StrPotion;
 class HpPotion;
 
@@ -23,10 +22,10 @@ private:
     Coordinate pos;
     int hp;
     int str;
-    list<IPotion *> potions;
+    int hp_potions;
+    int str_potions;
     list<string> msgs;
 
-    void addPotion(IPotion* potion);
 public:
     // ID
     User(string id);
@@ -48,8 +47,8 @@ public:
     // Potion
     void setHpPotion(int cnt);
     void setStrPotion(int cnt);
-    list<HpPotion *> getHpPotions();
-    list<StrPotion *> getStrPotions();
+    int getHpPotions() const;
+    int getStrPotions() const;
 
     // Messages
     list<string> getMessages();

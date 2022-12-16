@@ -74,6 +74,25 @@ bool UserController::attack(IRequestDTO *&body, IResponseDTO *&resp) {
     return status;
 }
 
+bool UserController::usePotion(IRequestDTO *&body, IResponseDTO *&resp) {
+    this->logger->logInfoMsg("[DEBUG][UserController][usePotion] called");
+    if (!body->has("type"))
+        return false;
+
+    string type = body->getString("type");
+    string userId = getUserId(body->getString("Request URL"));
+
+    User* user = userService->findUserById(userId);
+    if (user == nullptr)
+        return false;
+
+    bool status = userService->usePotion(user, type);
+
+    user = userService->findUserById(userId);
+    resp->setUser(*user);
+    return status;
+}
+
 bool UserController::sendMsg(IRequestDTO *&body, IResponseDTO *&resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][sendMsg] called");
     if (!body->has("msg_to") || !body->has("msg_content"))
@@ -122,6 +141,8 @@ IResponseDTO *UserController::get(IRequestDTO *body, IResponseDTO *resp) {
         status = attack(body, resp);
     } else if  (std::regex_match(path, std::regex("/user/[^/]+/sendMsg"))) {
         status = sendMsg(body, resp);
+    } else if  (std::regex_match(path, std::regex("/user/[^/]+/potion"))) {
+        status = usePotion(body, resp);
     } else if (std::regex_match(path, std::regex("/user/[^/]+"))) {
         status = getUserInfo(body, resp);
     } else {

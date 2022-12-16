@@ -80,3 +80,24 @@ bool UserService::resetSession(User *user) {
 list<User *> UserService::findAllUser() {
     return this->userRepository->findAll();
 }
+
+bool UserService::usePotion(User *user, string type) {
+    if (type == "hp") {
+        int potion_cnt = user->getHpPotions();
+        if (potion_cnt > 0) {
+            user->setHpPotion(potion_cnt - 1);
+            HpPotion::action(user);
+        }
+    } else if (type == "str") {
+        int potion_cnt = user->getStrPotions();
+        if (potion_cnt > 0) {
+            user->setStrPotion(potion_cnt - 1);
+            StrPotion::action(user);
+        }
+    } else {
+        this->logger->logInfoMsg("[DEBUG] [usePotion] not allowed potion " + type);
+        return false;
+    }
+    userRepository->updateUser(user->getId(), user);
+    return true;
+}

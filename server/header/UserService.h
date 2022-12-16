@@ -21,6 +21,7 @@ public:
     bool sendMsg(User *from, User *to, string msg) override;
     bool attack(User* user) override;
     bool resetSession(User *user) override;
+    bool usePotion(User* user, string type) override;
     list<User *> findAllUser() override;
 };
 

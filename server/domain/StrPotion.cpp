@@ -4,5 +4,7 @@
 
 #include "../header/StrPotion.h"
 
+
 void StrPotion::action(User *user) {
+    user->setStr(user->getStr() + 3);
 }

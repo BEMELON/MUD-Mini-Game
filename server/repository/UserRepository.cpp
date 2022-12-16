@@ -199,13 +199,12 @@ User *UserRepository::updateUser(std::string userId, User *updatedUser) {
                      "SET USER:%s:str %s", user->getId().c_str(), std::to_string(updatedUser->getStr()).c_str());
 
 
-    // update HP potion
-    const list<HpPotion *> &hpPotions = updatedUser->getHpPotions();
-
+    string hp_prefix = "SET USER:" + user->getId() + ":potion:hp %s";
+    string str_prefix = "SET USER:" + user->getId() + ":potion:str %s";
     redisCommand(this->dataRepository->redis,
-                 "SET USER:%s:potion:hp %s", user->getId().c_str(), std::to_string(hpPotions.size()).c_str());
+                 hp_prefix.c_str(), std::to_string(updatedUser->getHpPotions()).c_str());
     redisCommand(this->dataRepository->redis,
-                 "SET USER:%s:potion:str %s", user->getId().c_str(), std::to_string(hpPotions.size()).c_str());
+                 str_prefix.c_str(), std::to_string(updatedUser->getStrPotions()).c_str());
 
     int x = updatedUser->getPos().getX();
     int y = updatedUser->getPos().getY();
