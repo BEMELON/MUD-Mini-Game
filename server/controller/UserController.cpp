@@ -51,7 +51,7 @@ bool UserController::moveUser(IRequestDTO* &body, IResponseDTO* &resp) {
     if (!body->has("x") || !body->has("y")) return false;
 
     string userId = getUserId(body->getString("Request URL"));
-    User* user = this->userService->login(userId);
+    User* user = this->userService->findUserById(userId);
     if (user == nullptr) return false;
     int x = stoi(body->getString("x"));
     int y = stoi(body->getString("y"));
@@ -118,7 +118,7 @@ bool UserController::sendMsg(IRequestDTO *&body, IResponseDTO *&resp) {
 bool UserController::event(IRequestDTO *&body, IResponseDTO *&resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][event] called");
     string from = getUserId(body->getString("Request URL"));
-    User* user = userService->findUserById(from);
+    User* user = userService->findUserById(from, true);
     if (user == nullptr)
         return false;
     bool status = userService->resetSession(user);
@@ -166,7 +166,7 @@ void UserController::setUserService(IUserService *iUserService) {
 string UserController::getUserId(const string &path) {
     int first_slash = path.find('/', 0);
     int second_slash = path.find('/', first_slash + 1);
-    int third_slash = path.find('/', second_slash);
+    int third_slash = path.find('/', second_slash + 1);
 
-    return path.substr(second_slash + 1, third_slash);
+    return path.substr(second_slash + 1, third_slash - second_slash - 1);
 }

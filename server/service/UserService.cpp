@@ -90,3 +90,15 @@ bool UserService::usePotion(User *user, string type) {
     userRepository->updateUser(user->getId(), user);
     return true;
 }
+
+User *UserService::findUserById(string userId, bool message) {
+    list<string> empty;
+    list<string> messages;
+    User* user = findUserById(userId);
+    messages = user->getMessages();
+    user->setMessages(empty);
+    userRepository->updateUser(userId, user);
+    user->setMessages(messages);
+
+    return user;
+}

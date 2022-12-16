@@ -125,25 +125,28 @@ void EpollEventHandler::listen(int port) {
                 memset(buffer, 0, 2048);
                 flag = recv(active, buffer, 2048, 0);;
 
-                if (::strlen(buffer) == 0 || flag < 0) {
+                if (flag < 0) {
                     this->logger->logInfoMsg("[DEBUG] Client has been terminated");
                     close(active);
                     epoll_ctl(epfd, EPOLL_CTL_DEL, active, NULL);
+                } else if (::strlen(buffer) == 0) {
+                    continue;
                 } else {
-                    jsonParser.parse(buffer);
+                        jsonParser.parse(buffer);
 
-                    string url = jsonParser.getString("Request URL"); // /user/create
-                    string root = getRoot(url);
-                    auto fn = this->router.find(root)->second;
-                    IController *controller = this->controller.find(root)->second;
+                        string url = jsonParser.getString("Request URL"); // /user/create
+                        string root = getRoot(url);
+                        auto fn = this->router.find(root)->second;
+                        IController *controller = this->controller.find(root)->second;
 
-                    this->requestDto->setBody(buffer);
-                    this->responseDto->clean();
-                    IResponseDTO* res = (controller->*fn)(this->requestDto, this->responseDto);
+                        this->requestDto->setBody(buffer);
+                        this->responseDto->clean();
+                        IResponseDTO* res = (controller->*fn)(this->requestDto, this->responseDto);
 
-                    if (send(active, res->getJsonMsg().c_str(), res->getJsonMsg().size(), 0) < 0)
-                        this->logger->logSysErrorMsg("Send Error");
+                        if (send(active, res->getJsonMsg().c_str(), res->getJsonMsg().size(), 0) < 0)
+                            this->logger->logSysErrorMsg("Send Error");
                 }
+
             }
         }
     }
