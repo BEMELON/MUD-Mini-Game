@@ -75,10 +75,10 @@ rapidjson::Value JsonBuilder::buildUser(User &user) {
     Value value_str(to_string(user.getStr()).c_str(), d.GetAllocator());
 
     Value key_x("x", d.GetAllocator());
-    Value value_x(to_string(user.getPos().getX()).c_str(), d.GetAllocator());
+    Value value_x(to_string(user.getX()).c_str(), d.GetAllocator());
 
     Value key_y("y", d.GetAllocator());
-    Value value_y(to_string(user.getPos().getY()).c_str(), d.GetAllocator());
+    Value value_y(to_string(user.getY()).c_str(), d.GetAllocator());
 
     Value key_hp_potion("hp-potion", d.GetAllocator());
     Value value_hp_potion(to_string(user.getHpPotions()).c_str(), d.GetAllocator());

@@ -1,13 +1,58 @@
 //
-// Created by BEMELON on 22. 12. 16.
+// Created by BEMELON on 22. 12. 8.
 //
 
 #ifndef MUD_SERVER_USER_H
 #define MUD_SERVER_USER_H
 
 
-class User {
+#include <list>
+#include <string>
 
+using namespace std;
+class StrPotion;
+class HpPotion;
+
+class User {
+private:
+    string id;
+    int x;
+    int y;
+    int hp;
+    int str;
+    int hp_potions;
+    int str_potions;
+    list<string> msgs;
+
+public:
+    // ID
+    User(string id);
+    string getId();
+
+    // HP
+    void setHp(int hp);
+    int getHp() const;
+
+    // STR
+    void setStr(int str);
+    int getStr() const;
+
+    // Coordinate
+    void setPos(int x, int y);
+    int getX();
+    int getY();
+
+    // Potion
+    void setHpPotion(int cnt);
+    void setStrPotion(int cnt);
+    int getHpPotions() const;
+    int getStrPotions() const;
+
+    // Messages
+    list<string> getMessages();
+    void setMessages(list<string> &messages);
+    void addMessage(string &message);
+    string popMessage();
 };
 
 
