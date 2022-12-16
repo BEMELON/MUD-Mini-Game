@@ -34,6 +34,12 @@ bool UserController::getAllUser(IRequestDTO* &body, IResponseDTO* &resp) {
 
 bool UserController::getUserInfo(IRequestDTO* &body, IResponseDTO* &resp) {
     this->logger->logInfoMsg("[DEBUG][UserController][getUserInfo] called");
+    string userId = getUserId(body->getString("Request URL"));
+    User* user = this->userService->findUserById(userId);
+    if (user == nullptr)
+        return false;
+
+    resp->setUser(*user);
     return true;
 }
 
